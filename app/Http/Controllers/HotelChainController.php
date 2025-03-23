@@ -76,17 +76,23 @@ class HotelChainController extends Controller
         $exists = exists(HotelChain::class, $request->hotelchain);
         if (!$exists) {
             try {
-                $hotelchain = $request->hotelchain;
-                // $hotelchain['created_by'] = Auth::user()->id;
+                $hotelchainData = $request->hotelchain;
 
-                $HotelChain = HotelChain::create($hotelchain);
+                // Create the HotelChain record and automatically retrieve its ID
+                $hotelChain = HotelChain::create($hotelchainData);
 
-                $account = new BankAccount();
-                $account->account_for    = "hotelchain";
-                $account->ref_id         = $HotelChain->id;
-                $account->bank_name      = $HotelChain->bank_name;
-                $account->bank_no        = $HotelChain->bank_no;
-                $account->save();
+                // Update the code field and save in one step
+                $hotelChain->update([
+                    'code' => str_pad($hotelChain->id, 4, "0", STR_PAD_LEFT)
+                ]);
+
+                // Create the associated BankAccount record
+                BankAccount::create([
+                    'account_for' => 'hotelchain',
+                    'ref_id'      => $hotelChain->id,
+                    'bank_name'   => $hotelChain->bank_name,
+                    'bank_no'     => $hotelChain->bank_no,
+                ]);
 
                 return redirect()->route('hotelchains.index')->with('success', 'Record added successfully!');
             } catch (\Throwable $th) {

@@ -53,12 +53,12 @@
                                         <input type="text" class="form-control" id="name" name="hotelchain[name]" placeholder="Elewana, Marriott, etc." required="" value="{{ isset($hotelchain) ? $hotelchain->name : old('name') }}">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="code">Code</label>
                                         <input type="text" class="form-control" id="code" name="hotelchain[code]" placeholder="Hotel Chain Code" required="" value="{{ isset($hotelchain) ? $hotelchain->code : old('code') }}">
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="email">Email</label>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('hotel_chains', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('bank_name')->nullable();
