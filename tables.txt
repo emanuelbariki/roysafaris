@@ -1,0 +1,166 @@
+ User Management
+
+- Users (id,
+    name,
+    email,
+    phone,
+    password,
+    role_id,
+    status [Active,Inactive])
+
+- Roles (id,
+    name [Admin,
+    Operations,
+    Driver,
+    Mechanic])
+
+- Permissions (id,
+    role_id,
+    module,
+    can_view,
+    can_edit,
+    can_delete)
+
+
+Masters/Settings
+
+- FleetType (id,
+    name [Transfer,Safari,VIP,etc.])
+
+- FleetClass (id,
+    name [Luxury,Semi-Luxury,Standard])
+
+- Fleet (id,
+    reg_no,
+    fleet_type_id,
+    fleet_class_id,
+    seats,
+    status [Active,Maintenance],
+    purchase_date,
+    mileage)
+
+- DriverType (id,
+    name [Transfer,Safari,LargeGroups,VIP,etc.])
+
+- Drivers (id,
+    name,
+    driver_type_id,
+    fleet_id,
+    license_no,
+    phone,
+    email,
+    status [Active,On Leave])
+
+- TripType (id,
+    name [Transfer,Safari,etc.])
+
+- ServiceItems (id,
+    name [Lunch Boxes, Water, etc.],
+    category [Food, Gear, Essentials])
+
+- Locations (id,
+    name,
+    type [Hotel,Lodge,Park,Airport],
+    gps_coordinates)
+
+
+
+Trip & Safari Management
+- Trips (id,
+    trip_type_id,
+    driver_id,
+    fleet_id,
+    no_passengers,
+    trip_name,
+    start_date,
+    end_date,
+    status [Scheduled,Ongoing,Completed],
+    notes)
+
+- TripStops (id,
+    trip_id,
+    pickup_location,
+    dropoff_location,
+    etd,
+    eta,
+    note)
+
+- TripServices (id,
+    trip_id,
+    service_item_id,
+    quantity,
+    note)
+
+- TripExpenses (id,
+    trip_id,
+    expense_type,
+    amount,
+    details,
+    recorded_by)
+
+- TripFeedback (id,
+    trip_id,
+    customer_name,
+    rating,
+    comments)
+
+Fleet & Maintenance Management
+- FleetMaintenance (id,
+    fleet_id,
+    maintenance_type,
+    date,
+    cost,
+    details,
+    next_due_date,
+    performed_by)
+
+- FuelRecords (id,
+    fleet_id,
+    date,
+    liters,
+    cost,
+    recorded_by)
+
+- AccidentReports (id,
+    fleet_id,
+    date,
+    location,
+    description,
+    driver_id,
+    damage_severity,
+    insurance_claim_status)
+
+- DriverAvailability (id,
+    driver_id,
+    date,
+    available [Yes/No],
+    reason)
+
+Hotel & Accommodation Management
+- Hotels (id,
+    name,
+    location_id,
+    contact_person,
+    phone,
+    email,
+    rating)
+
+- HotelBookings (id,
+    trip_id,
+    hotel_id,
+    check_in_date,
+    check_out_date,
+    room_type,
+    status [Confirmed, Pending, Canceled])
+
+
+
+Reporting & Analytics
+
+- Vehicle and driver availability
+- Driver workload analysis (trips per month,total hours driven)
+- Fleet maintenance and service history
+- Fuel consumption and efficiency reports
+- Trip success rate and customer feedback analysis
+- Passenger volume trends
+- Financial reports (trip expenses,fuel costs,revenue estimates)
