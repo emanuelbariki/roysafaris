@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('hotel_chain_id')->nullable();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('accommodations_type_id');
             $table->string('address');
             $table->string('city');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email');
             $table->string('website');
-            $table->string('camping_logistics');
+            $table->string('camping_logistics')->nullable();
             $table->string('balloon_pickup');
             $table->string('voucher_copies');
             $table->string('pay_to');

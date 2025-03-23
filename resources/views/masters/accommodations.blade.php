@@ -77,19 +77,21 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="name">Accommodation Name</label>
-                                        <input type="text" onkeyup="generateCode(this)" class="form-control" id="name" name="accommodation[name]" placeholder="e.g., Arusha Coffee Lodge" required
+                                        <input type="text" 
+                                        {{-- onkeyup="generateCode(this)"  --}}
+                                        class="form-control" id="name" name="accommodation[name]" placeholder="e.g., Arusha Coffee Lodge" required
                                             value="{{ isset($accommodation) ? $accommodation->name : old('name') }}">
                                     </div>
                                 </div>
 
                                 <!-- System Code -->
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="code">System Code</label>
                                         <input type="text" class="form-control" id="code" name="accommodation[code]" placeholder="e.g., ACF" required
                                             value="{{ isset($accommodation) ? $accommodation->code : old('code') }}">
                                     </div>
-                                </div>
+                                </div> --}}
 
                         
                                 <!-- Accommodation Type -->
@@ -160,7 +162,7 @@
                                 </div>
                         
                                 <!-- Camping Logistics -->
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="camping_logistics">Camping Logistics</label>
                                         <select name="accommodation[camping_logistics]" class="form-control">
@@ -169,7 +171,7 @@
                                             <option value="no" {{ isset($accommodation) && $accommodation->camping_logistics == 'no' ? 'selected' : '' }}>No</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
                         
                                 <!-- Balloon Pickup -->
                                 <div class="col-md-4">
@@ -183,14 +185,14 @@
                                     </div>
                                 </div>
                         
-                                <!-- Voucher Copies -->
+                                {{-- <!-- Voucher Copies -->
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="voucher_copies">Voucher Copies</label>
                                         <input type="number" class="form-control" id="voucher_copies" name="accommodation[voucher_copies]" placeholder="Number of copies" 
                                             value="{{ isset($accommodation) ? $accommodation->voucher_copies : old('voucher_copies') }}">
                                     </div>
-                                </div>
+                                </div> --}}
                         
                                 <!-- Pay To -->
                                 <div class="col-md-4">
@@ -390,21 +392,21 @@
 
 
     <script>
-        function generateCode(obj) {
-            let name = $(obj).val().trim();
+        // function generateCode(obj) {
+        //     let name = $(obj).val().trim();
             
-            if (name.length > 0) {
-                // Extract first letter of each word and uppercase it
-                let code = name
-                    .split(" ") // Split by spaces
-                    .map(word => word.charAt(0).toUpperCase()) // Get first letter and uppercase
-                    .join(""); // Join letters together
+        //     if (name.length > 0) {
+        //         // Extract first letter of each word and uppercase it
+        //         let code = name
+        //             .split(" ") // Split by spaces
+        //             .map(word => word.charAt(0).toUpperCase()) // Get first letter and uppercase
+        //             .join(""); // Join letters together
 
-                $("#code").val(code); // Set the generated code to the input
-            } else {
-                $("#code").val(""); // Clear code if name is empty
-            }
-        }
+        //         $("#code").val(code); // Set the generated code to the input
+        //     } else {
+        //         $("#code").val(""); // Clear code if name is empty
+        //     }
+        // }
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcsiMXmmvBkKjXRp_v2oAuPefr48qxQ3w&libraries=places"></script>

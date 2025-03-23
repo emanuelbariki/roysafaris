@@ -84,7 +84,14 @@ class AccommodationController extends Controller
         $exists = exists(Accommodation::class, ['code' => $accommodationData['code']]);
         if (!$exists) {
             try {
+                $accommodationData['voucher_copies'] = 3;
                 $Accommodation = Accommodation::create($accommodationData);
+
+                // Update the code field and save in one step
+                $Accommodation->update([
+                    'code' => str_pad($Accommodation->id, 4, "0", STR_PAD_LEFT)
+                ]);
+
                 if (isset($request->bank_name) && $request->bank_name != "") {
                     $account = new BankAccount();
                     $account->account_for = "accommodation";
@@ -128,7 +135,6 @@ class AccommodationController extends Controller
 
         $validatedData = $request->validate([
             'accommodation.name' => 'required|string|max:255',
-            'accommodation.code' => 'required|string|max:50|unique:accommodations,code,' . $id,
             'accommodation.hotel_chain_id' => 'required|exists:hotel_chains,id',
             'accommodation.accommodations_type_id' => 'required|exists:accommodation_types,id',
             'accommodation.address' => 'nullable|string|max:255',
@@ -137,9 +143,6 @@ class AccommodationController extends Controller
             'accommodation.phone' => 'nullable|string|max:20',
             'accommodation.email' => 'nullable|email|max:255',
             'accommodation.website' => 'nullable|url|max:255',
-            'accommodation.camping_logistics' => 'nullable|in:yes,no',
-            'accommodation.balloon_pickup' => 'nullable|in:yes,no',
-            'accommodation.voucher_copies' => 'nullable|integer|min:0',
             'accommodation.pay_to' => 'nullable|in:hotel,chain',
             'accommodation.billing_ccy' => 'nullable|string|max:10',
             'accommodation.coordinates' => 'nullable|string|max:50',
