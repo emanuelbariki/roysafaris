@@ -40,9 +40,7 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        //
-        // Check if the brand already in db
+
         $driver = $request->driver;
         $exists = exists(Driver::class, array('email'=>$driver['email'], 'license_no'=>$driver['license_no']));
         if (!$exists) {

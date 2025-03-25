@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AccommodationController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CarrierController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\DriverTypeController;
@@ -78,6 +80,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('trips', [TripController::class, 'index'])->name('trips.index');
     Route::post('trips', [TripController::class, 'store'])->name('trips.store');
     Route::put('trips/{id}', [TripController::class, 'update'])->name('trips.update');
+    
+    Route::get('carriers', [CarrierController::class, 'index'])->name('carriers.index');
+    Route::post('carriers', [CarrierController::class, 'store'])->name('carriers.store');
+    Route::put('carriers/{id}', [CarrierController::class, 'update'])->name('carriers.update');
+
+    Route::get('AjaxGetCities', [CityController::class, 'ajaxGetCitites'])->name('ajax.fetch.cities');
+
+
 
 
 

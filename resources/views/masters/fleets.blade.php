@@ -126,12 +126,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Horizontal form</h4>
-                        <p class="text-muted mb-0">Be sure to use <code class="highlighter-rouge">.col-form-label-sm</code> 
-                            or <code class="highlighter-rouge">.col-form-label-lg</code> to your <code class="highlighter-rouge">&lt;label&gt;</code>s 
-                            or <code class="highlighter-rouge">&lt;legend&gt;</code>s 
-                            to correctly follow the size of <code class="highlighter-rouge">.form-control-lg</code> and 
-                            <code class="highlighter-rouge">.form-control-sm</code>.
-                        </p>
+                        <p class="text-muted mb-0">Available Records</p>
                     </div><!--end card-header-->
                     <div class="card-body">                                    
                         <div class="table-responsive">
