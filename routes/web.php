@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccommodationController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CarrierController;
+use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriverController;
@@ -101,6 +102,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('mountain-routes', [MountainRouteController::class, 'index'])->name('mountainroutes.index');
     Route::post('mountain-routes', [MountainRouteController::class, 'store'])->name('mountainroutes.store');
     Route::put('mountain-routes/{id}', [MountainRouteController::class, 'update'])->name('mountainroutes.update');
+
+    Route::get('channels', [ChannelController::class, 'index'])->name('channels.index');
+    Route::post('channels', [ChannelController::class, 'store'])->name('channels.store');
+    Route::put('channels/{id}', [ChannelController::class, 'update'])->name('channels.update');
 
 
 
