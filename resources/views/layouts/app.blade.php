@@ -63,7 +63,36 @@
         <script src="plugins/daterangepicker/daterangepicker.js"></script>
         <!-- App js -->
         <script src="assets/js/app.js"></script>
-
+        
+        <script>
+            function loadcities(selectElement) {
+                var countryId = selectElement.value;
+                
+                if (!countryId) {
+                    return;
+                }
+        
+                $.ajax({
+                    url: "{{ route('ajax.fetch.cities') }}", // Define the route in Laravel
+                    type: "GET",
+                    data: { country_id: countryId },
+                    success: function(response) {
+                        var cityDropdown = $("#city");
+                        cityDropdown.empty(); // Clear existing options
+                        cityDropdown.append('<option selected disabled>Choose</option>');
+        
+                        if (response.length > 0) {
+                            $.each(response, function(index, city) {
+                                cityDropdown.append('<option value="' + city.id + '">' + city.name + '</option>');
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error("Error fetching cities:", xhr);
+                    }
+                });
+            }
+        </script>
 
         @yield('scripts')
         

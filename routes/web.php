@@ -11,6 +11,7 @@ use App\Http\Controllers\FleetClassController;
 use App\Http\Controllers\FleetController;
 use App\Http\Controllers\FleetTypeController;
 use App\Http\Controllers\HotelChainController;
+use App\Http\Controllers\MountainController;
 use App\Http\Controllers\ServiceItemController;
 use App\Http\Controllers\ServiceProviderController;
 use App\Http\Controllers\TripController;
@@ -90,8 +91,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('service-providers', [ServiceProviderController::class, 'index'])->name('serviceproviders.index');
     Route::post('service-providers', [ServiceProviderController::class, 'store'])->name('serviceproviders.store');
     Route::put('service-providers/{id}', [ServiceProviderController::class, 'update'])->name('serviceproviders.update');
-
     Route::get('AjaxGetCities', [CityController::class, 'ajaxGetCitites'])->name('ajax.fetch.cities');
+
+    Route::get('mountains', [MountainController::class, 'index'])->name('mountains.index');
+    Route::post('mountains', [MountainController::class, 'store'])->name('mountains.store');
+    Route::put('mountains/{id}', [MountainController::class, 'update'])->name('mountains.update');
 
 
 

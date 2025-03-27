@@ -34,6 +34,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('serviceproviders.index') }}"><i class="ti-control-record"></i>Service Providers</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('hotelchains.index') }}"><i class="ti-control-record"></i>Hotel Chains</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('accommodations.index') }}"><i class="ti-control-record"></i>Accomodations</a></li> 
+                    <li class="nav-item"><a class="nav-link" href="{{ route('mountains.index') }}"><i class="ti-control-record"></i>Mountains</a></li> 
                 </ul>
             </li>
 
