@@ -12,6 +12,7 @@ use App\Http\Controllers\FleetController;
 use App\Http\Controllers\FleetTypeController;
 use App\Http\Controllers\HotelChainController;
 use App\Http\Controllers\ServiceItemController;
+use App\Http\Controllers\ServiceProviderController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\TripTypeController;
 use Illuminate\Support\Facades\Route;
@@ -85,8 +86,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('carriers', [CarrierController::class, 'store'])->name('carriers.store');
     Route::put('carriers/{id}', [CarrierController::class, 'update'])->name('carriers.update');
 
-    Route::get('AjaxGetCities', [CityController::class, 'ajaxGetCitites'])->name('ajax.fetch.cities');
+    
+    Route::get('service-providers', [ServiceProviderController::class, 'index'])->name('serviceproviders.index');
+    Route::post('service-providers', [ServiceProviderController::class, 'store'])->name('serviceproviders.store');
+    Route::put('service-providers/{id}', [ServiceProviderController::class, 'update'])->name('serviceproviders.update');
 
+    Route::get('AjaxGetCities', [CityController::class, 'ajaxGetCitites'])->name('ajax.fetch.cities');
 
 
 

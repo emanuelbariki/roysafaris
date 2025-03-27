@@ -30,6 +30,8 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('drivers.index') }}"><i class="ti-control-record"></i>Drivers</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('triptypes.index') }}"><i class="ti-control-record"></i>Trip Types</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('serviceitems.index') }}"><i class="ti-control-record"></i>Service Items</a></li> 
+                    <li class="nav-item"><a class="nav-link" href="{{ route('carriers.index') }}"><i class="ti-control-record"></i>Carriers</a></li> 
+                    <li class="nav-item"><a class="nav-link" href="{{ route('serviceproviders.index') }}"><i class="ti-control-record"></i>Service Providers</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('hotelchains.index') }}"><i class="ti-control-record"></i>Hotel Chains</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('accommodations.index') }}"><i class="ti-control-record"></i>Accomodations</a></li> 
                 </ul>
