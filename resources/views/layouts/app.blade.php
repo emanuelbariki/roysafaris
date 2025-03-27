@@ -30,6 +30,9 @@
             .hide{
                 display: none !important;
             }
+            .uppercase{
+                text-transform: uppercase;
+            }
         </style>
 
     </head>

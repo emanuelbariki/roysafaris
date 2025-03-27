@@ -12,6 +12,7 @@ use App\Http\Controllers\FleetController;
 use App\Http\Controllers\FleetTypeController;
 use App\Http\Controllers\HotelChainController;
 use App\Http\Controllers\MountainController;
+use App\Http\Controllers\MountainRouteController;
 use App\Http\Controllers\ServiceItemController;
 use App\Http\Controllers\ServiceProviderController;
 use App\Http\Controllers\TripController;
@@ -96,6 +97,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('mountains', [MountainController::class, 'index'])->name('mountains.index');
     Route::post('mountains', [MountainController::class, 'store'])->name('mountains.store');
     Route::put('mountains/{id}', [MountainController::class, 'update'])->name('mountains.update');
+
+    Route::get('mountain-routes', [MountainRouteController::class, 'index'])->name('mountainroutes.index');
+    Route::post('mountain-routes', [MountainRouteController::class, 'store'])->name('mountainroutes.store');
+    Route::put('mountain-routes/{id}', [MountainRouteController::class, 'update'])->name('mountainroutes.update');
 
 
 

@@ -35,6 +35,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('hotelchains.index') }}"><i class="ti-control-record"></i>Hotel Chains</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('accommodations.index') }}"><i class="ti-control-record"></i>Accomodations</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('mountains.index') }}"><i class="ti-control-record"></i>Mountains</a></li> 
+                    <li class="nav-item"><a class="nav-link" href="{{ route('mountainroutes.index') }}"><i class="ti-control-record"></i>Mountain Routes</a></li> 
                 </ul>
             </li>
 
