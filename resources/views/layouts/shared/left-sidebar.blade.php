@@ -37,7 +37,8 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('mountains.index') }}"><i class="ti-control-record"></i>Mountains</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('mountainroutes.index') }}"><i class="ti-control-record"></i>Mountain Routes</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('channels.index') }}"><i class="ti-control-record"></i>Channels</a></li> 
-                    <li class="nav-item"><a class="nav-link" href="{{ route('channels.index') }}"><i class="ti-control-record"></i>Channels</a></li> 
+                    <li class="nav-item"><a class="nav-link" href="{{ route('currencies.index') }}"><i class="ti-control-record"></i>Currency</a></li> 
+                    <li class="nav-item"><a class="nav-link" href="{{ route('parkfees.index') }}"><i class="ti-control-record"></i>Park Fees</a></li> 
                 </ul>
             </li>
 

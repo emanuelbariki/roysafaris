@@ -83,16 +83,6 @@
                                             value="{{ isset($accommodation) ? $accommodation->name : old('name') }}">
                                     </div>
                                 </div>
-
-                                <!-- System Code -->
-                                {{-- <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="code">System Code</label>
-                                        <input type="text" class="form-control" id="code" name="accommodation[code]" placeholder="e.g., ACF" required
-                                            value="{{ isset($accommodation) ? $accommodation->code : old('code') }}">
-                                    </div>
-                                </div> --}}
-
                         
                                 <!-- Accommodation Type -->
                                 <div class="col-md-4">
@@ -161,18 +151,6 @@
                                     </div>
                                 </div>
                         
-                                <!-- Camping Logistics -->
-                                {{-- <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="camping_logistics">Camping Logistics</label>
-                                        <select name="accommodation[camping_logistics]" class="form-control">
-                                            <option selected disabled>Choose</option>
-                                            <option value="yes" {{ isset($accommodation) && $accommodation->camping_logistics == 'yes' ? 'selected' : '' }}>Yes</option>
-                                            <option value="no" {{ isset($accommodation) && $accommodation->camping_logistics == 'no' ? 'selected' : '' }}>No</option>
-                                        </select>
-                                    </div>
-                                </div> --}}
-                        
                                 <!-- Balloon Pickup -->
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -184,15 +162,6 @@
                                         </select>
                                     </div>
                                 </div>
-                        
-                                {{-- <!-- Voucher Copies -->
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="voucher_copies">Voucher Copies</label>
-                                        <input type="number" class="form-control" id="voucher_copies" name="accommodation[voucher_copies]" placeholder="Number of copies" 
-                                            value="{{ isset($accommodation) ? $accommodation->voucher_copies : old('voucher_copies') }}">
-                                    </div>
-                                </div> --}}
                         
                                 <!-- Pay To -->
                                 <div class="col-md-4">

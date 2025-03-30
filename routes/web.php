@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CarrierController;
 use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\DriverTypeController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\HotelChainController;
 use App\Http\Controllers\MountainController;
 use App\Http\Controllers\MountainRouteController;
 use App\Http\Controllers\NationalParkController;
+use App\Http\Controllers\ParkFeeController;
 use App\Http\Controllers\ServiceItemController;
 use App\Http\Controllers\ServiceProviderController;
 use App\Http\Controllers\TripController;
@@ -108,9 +110,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('channels', [ChannelController::class, 'store'])->name('channels.store');
     Route::put('channels/{id}', [ChannelController::class, 'update'])->name('channels.update');
 
+    Route::get('currencies', [CurrencyController::class, 'index'])->name('currencies.index');
+    Route::post('currencies', [CurrencyController::class, 'store'])->name('currencies.store');
+    Route::put('currencies/{id}', [CurrencyController::class, 'update'])->name('currencies.update');
+
     Route::get('national-parks', [NationalParkController::class, 'index'])->name('nationalparks.index');
     Route::post('national-parks', [NationalParkController::class, 'store'])->name('nationalparks.store');
     Route::put('national-parks/{id}', [NationalParkController::class, 'update'])->name('nationalparks.update');
+
+    Route::get('park-fees', [ParkFeeController::class, 'index'])->name('parkfees.index');
+    Route::post('park-fees', [ParkFeeController::class, 'store'])->name('parkfees.store');
+    Route::put('park-fees/{id}', [ParkFeeController::class, 'update'])->name('parkfees.update');
+    Route::get('ajax-park-fees-data}', [ParkFeeController::class, 'Ajax_parkFeesData'])->name('parkFeesData');
 
 
 
