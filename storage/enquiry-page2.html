@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari Booking Form</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .form-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+        }
+        .form-section h5 {
+            color: #0d6efd;
+            margin-bottom: 20px;
+        }
+        .interest-checkbox {
+            margin-bottom: 10px;
+        }
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        .safari-header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4 mb-5">
+        <div class="row">
+            <div class="col-12 safari-header">
+                <h3><i class="fas fa-safari me-2"></i> Safari Booking Enquiry</h3>
+                <p class="mb-0">Please fill out the form below to submit your enquiry</p>
+            </div>
+            
+            <div class="col-12">
+                <form id="safariBookingForm">
+                    <!-- Client Information Section -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-user me-2"></i> Client Information</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="firstName" class="form-label required-field">First Name</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName" class="form-label required-field">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label required-field">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label required-field">Phone</label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="mobile" class="form-label">Mobile</label>
+                                <input type="tel" class="form-control" id="mobile">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="country" class="form-label required-field">Country</label>
+                                <select class="form-select" id="country" required>
+                                    <option value="" selected disabled>Select Country</option>
+                                    <option value="US">United States</option>
+                                    <option value="UK">United Kingdom</option>
+                                    <option value="DE">Germany</option>
+                                    <!-- More countries would be added here -->
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="address" class="form-label">Address/Company</label>
+                                <input type="text" class="form-control" id="address">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="postalCode" class="form-label">Postal Code</label>
+                                <input type="text" class="form-control" id="postalCode">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Travel Details Section -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-calendar-alt me-2"></i> Travel Details</h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="arrivalDate" class="form-label required-field">Arrival Date</label>
+                                <input type="date" class="form-control" id="arrivalDate" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="departureDate" class="form-label required-field">Departure Date</label>
+                                <input type="date" class="form-control" id="departureDate" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="flexibleDates" class="form-label">Flexible with dates?</label>
+                                <select class="form-select" id="flexibleDates">
+                                    <option value="no">No, these are fixed dates</option>
+                                    <option value="yes">Yes, I'm flexible</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="adults" class="form-label required-field">Adults</label>
+                                <input type="number" class="form-control" id="adults" min="1" value="1" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="children" class="form-label">Children (2-12)</label>
+                                <input type="number" class="form-control" id="children" min="0" value="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="infants" class="form-label">Infants (<2)</label>
+                                <input type="number" class="form-control" id="infants" min="0" value="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="juniors" class="form-label">Juniors (13-17)</label>
+                                <input type="number" class="form-control" id="juniors" min="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tour Interests Section -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-binoculars me-2"></i> Tour Interests</h5>
+                        <p>Please select all that apply:</p>
+                        <div class="row">
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="accommodationOnly">
+                                    <label class="form-check-label" for="accommodationOnly">Accommodation only</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="flyingSafari">
+                                    <label class="form-check-label" for="flyingSafari">Flying Safari</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="mountainClimbing">
+                                    <label class="form-check-label" for="mountainClimbing">Mountain climbing</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="beach">
+                                    <label class="form-check-label" for="beach">Beach</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="hotelTransfers">
+                                    <label class="form-check-label" for="hotelTransfers">Hotel & Airport Transfers</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="parkFee">
+                                    <label class="form-check-label" for="parkFee">Park fee</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="campingSafari">
+                                    <label class="form-check-label" for="campingSafari">Camping safari</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="lodgeCampSafari">
+                                    <label class="form-check-label" for="lodgeCampSafari">Lodge & Camp safari</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="southernCircuit">
+                                    <label class="form-check-label" for="southernCircuit">Southern Circuit Safari</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="excursions">
+                                    <label class="form-check-label" for="excursions">Excursions</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="lodgeSafari">
+                                    <label class="form-check-label" for="lodgeSafari">Lodge safari</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 interest-checkbox">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="tailorMade">
+                                    <label class="form-check-label" for="tailorMade">Tailor-made</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label for="specialInterests" class="form-label">Special Interests/Requirements</label>
+                            <textarea class="form-control" id="specialInterests" rows="2" placeholder="Any specific animals you want to see, dietary requirements, accessibility needs, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Budget & Additional Information -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-money-bill-wave me-2"></i> Budget & Additional Information</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="budgetRange" class="form-label">Budget Range (per person)</label>
+                                <select class="form-select" id="budgetRange">
+                                    <option value="" selected disabled>Select Budget Range</option>
+                                    <option value="1000-2000">$1,000 - $2,000</option>
+                                    <option value="2000-3000">$2,000 - $3,000</option>
+                                    <option value="3000-5000">$3,000 - $5,000</option>
+                                    <option value="5000+">$5,000+</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="referralSource" class="form-label required-field">How did you find us?</label>
+                                <select class="form-select" id="referralSource" required>
+                                    <option value="" selected disabled>Select an option</option>
+                                    <option value="google">Google Search</option>
+                                    <option value="social">Social Media</option>
+                                    <option value="recommendation">Friend/Family Recommendation</option>
+                                    <option value="travel_agent">Travel Agent</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="comments" class="form-label">Additional Comments</label>
+                                <textarea class="form-control" id="comments" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Internal Use Section -->
+                    <div class="form-section bg-light">
+                        <h5><i class="fas fa-lock me-2"></i> Internal Use</h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="safariRef" class="form-label">Safari Reference</label>
+                                <input type="text" class="form-control" id="safariRef" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status">
+                                    <option value="enquiry" selected>Enquiry</option>
+                                    <option value="followup">Follow-up</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="enquiryDate" class="form-label">Enquiry Date</label>
+                                <input type="date" class="form-control" id="enquiryDate" value="2024-01-17">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fileOwner" class="form-label">File Owner</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="fileOwner" value="Rachael">
+                                    <button class="btn btn-outline-secondary" type="button" id="updateOwnerBtn">Update</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nextAction" class="form-label">Next Action</label>
+                                <input type="text" class="form-control" id="nextAction">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nextActionDate" class="form-label">Next Action Date</label>
+                                <input type="date" class="form-control" id="nextActionDate">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="priority" class="form-label">Priority</label>
+                                <select class="form-select" id="priority">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="urgent">Urgent</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-outline-secondary">
+                            <i class="fas fa-save me-2"></i>Save Draft
+                        </button>
+                        <div>
+                            <button type="reset" class="btn btn-danger me-2">
+                                <i class="fas fa-times me-2"></i>Reset Form
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Enquiry
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery and Bootstrap JS Bundle with Popper -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Generate a reference number
+            function generateReference() {
+                const prefix = "SAF";
+                const randomNum = Math.floor(10000 + Math.random() * 90000);
+                const today = new Date();
+                const dateStr = today.getFullYear().toString().substr(-2) + 
+                               (today.getMonth() + 1).toString().padStart(2, '0') + 
+                               today.getDate().toString().padStart(2, '0');
+                return `${prefix}${dateStr}${randomNum}`;
+            }
+
+            // Set the reference number on page load
+            $('#safariRef').val(generateReference());
+            
+            // Set today's date as default for enquiry date if empty
+            if(!$('#enquiryDate').val()) {
+                const today = new Date().toISOString().split('T')[0];
+                $('#enquiryDate').val(today);
+            }
+            
+            // Update owner button functionality
+            $('#updateOwnerBtn').click(function() {
+                const newOwner = prompt("Enter new file owner:", $('#fileOwner').val());
+                if(newOwner) {
+                    $('#fileOwner').val(newOwner);
+                }
+            });
+            
+            // Form submission
+            $('#safariBookingForm').submit(function(e) {
+                e.preventDefault();
+                // Here you would typically send the form data to the server
+                alert('Enquiry submitted successfully! Reference: ' + $('#safariRef').val());
+                // You could also redirect or reset the form here
+            });
+            
+            // Date validation - departure should be after arrival
+            $('#departureDate').change(function() {
+                const arrival = new Date($('#arrivalDate').val());
+                const departure = new Date($(this).val());
+                
+                if(departure <= arrival) {
+                    alert('Departure date must be after arrival date');
+                    $(this).val('');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
