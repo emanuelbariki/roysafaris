@@ -22,6 +22,7 @@ use App\Http\Controllers\ServiceProviderController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\TripTypeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookingController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -87,6 +88,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('trips', [TripController::class, 'index'])->name('trips.index');
     Route::post('trips', [TripController::class, 'store'])->name('trips.store');
     Route::put('trips/{id}', [TripController::class, 'update'])->name('trips.update');
+
+    //Route For Booking Process
+    Route::resource('bookings', BookingController::class);
+
     
     Route::get('carriers', [CarrierController::class, 'index'])->name('carriers.index');
     Route::post('carriers', [CarrierController::class, 'store'])->name('carriers.store');

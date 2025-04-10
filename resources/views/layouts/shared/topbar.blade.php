@@ -49,7 +49,7 @@
                             <small class="float-right text-muted pl-2">10 min ago</small>
                             <div class="media">
                                 <div class="avatar-md bg-soft-primary">
-                                    <img src="assets/images/users/user-4.jpg" alt="" class="thumb-sm rounded-circle">
+                                    <img src="{{ asset('assets/images/users/user-4.jpg')}}" alt="" class="thumb-sm rounded-circle">
                                 </div>
                                 <div class="media-body align-self-center ml-2 text-truncate">
                                     <h6 class="my-0 font-weight-normal text-dark">Meeting with designers</h6>
@@ -75,7 +75,7 @@
                             <small class="float-right text-muted pl-2">1 hr ago</small>
                             <div class="media">
                                 <div class="avatar-md bg-soft-primary">
-                                    <img src="assets/images/users/user-5.jpg" alt="" class="thumb-sm rounded-circle">
+                                    <img src="{{ asset('assets/images/users/user-5.jpg')}}" alt="" class="thumb-sm rounded-circle">
                                 </div>
                                 <div class="media-body align-self-center ml-2 text-truncate">
                                     <h6 class="my-0 font-weight-normal text-dark">Your order is placed</h6>
@@ -108,7 +108,7 @@
                 <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button"
                     aria-haspopup="false" aria-expanded="false">
                     <span class="ml-1 nav-user-name hidden-sm">{{ Auth::user()->name }}</span>
-                    <img src="assets/images/users/user-5.jpg" alt="profile-user" class="rounded-circle" />                                 
+                    <img src="{{ asset('assets/images/users/user-5.jpg')}}" alt="profile-user" class="rounded-circle" />                                 
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" href="#"><i data-feather="user" class="align-self-center icon-xs icon-dual mr-1"></i> Profile</a>
