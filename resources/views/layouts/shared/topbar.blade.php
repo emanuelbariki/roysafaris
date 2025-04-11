@@ -114,7 +114,10 @@
                     <a class="dropdown-item" href="#"><i data-feather="user" class="align-self-center icon-xs icon-dual mr-1"></i> Profile</a>
                     <a class="dropdown-item" href="#"><i data-feather="settings" class="align-self-center icon-xs icon-dual mr-1"></i> Settings</a>
                     <div class="dropdown-divider mb-0"></div>
-                    <a class="dropdown-item" href="#"><i data-feather="power" class="align-self-center icon-xs icon-dual mr-1"></i> Logout</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                            <button class="dropdown-item" type="submit" href="#"><i data-feather="power" class="align-self-center icon-xs icon-dual mr-1"></i> {{ __('Log Out') }}</a>
+                    </form>
                 </div>
             </li>
         </ul><!--end topbar-nav-->
