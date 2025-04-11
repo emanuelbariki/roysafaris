@@ -8,7 +8,7 @@
     <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                    <a href="{{ route('bookings.create') }}" class="btn btn-success mb-3">+ Add New Booking</a>
+                    <a href="{{ route('bookings.create') }}" class="btn btn-primary mb-3">+ Add New Booking</a>
                     </div><!--end card-header-->
                     <div class="card-body">                                    
                         <div class="table-responsive">
