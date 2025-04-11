@@ -23,6 +23,7 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\TripTypeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\VehicleTypeController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -91,6 +92,9 @@ Route::middleware(['auth'])->group(function () {
 
     //Route For Booking Process
     Route::resource('bookings', BookingController::class);
+
+    //Route for Vehicle Type 
+    Route::resource('vehicle-types', VehicleTypeController::class);
 
     
     Route::get('carriers', [CarrierController::class, 'index'])->name('carriers.index');

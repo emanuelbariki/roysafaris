@@ -60,7 +60,7 @@
                             <li><a href="{{ route('bookings.create') }}">Booking Create</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="apps-calendar.html"><i class="ti-control-record"></i>Calendar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('vehicle-types.index') }}"><i class="ti-control-record"></i>Vehicle Type</a></li>
                     <li class="nav-item"><a class="nav-link" href="apps-files.html"><i class="ti-control-record"></i>File Manager</a></li>
                     <li class="nav-item"><a class="nav-link" href="apps-invoice.html"><i class="ti-control-record"></i>Invoice</a></li>
                     <li class="nav-item"><a class="nav-link" href="apps-tasks.html"><i class="ti-control-record"></i>Tasks</a></li>
