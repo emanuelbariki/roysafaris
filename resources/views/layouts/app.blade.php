@@ -63,6 +63,7 @@
         <script src="{{ asset('assets/js/simplebar.min.js')}}"></script>
         <script src="{{ asset('assets/js/jquery-ui.min.js')}}"></script>
         <script src="{{ asset('assets/js/moment.js')}}"></script>
+        <script src="{{ asset('assets/js/sweetalert.min.js')}}"></script>
         <script src="{{ asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
         <!-- App js -->
         <script src="{{ asset('assets/js/app.js')}}"></script>
@@ -95,6 +96,47 @@
                     }
                 });
             }
+
+            <!-- Flash Message Handler -->
+            
+                @if(session('success'))
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: "{{ session('success') }}",
+                        confirmButtonColor: '#3085d6'
+                    });
+                @endif
+
+                @if(session('error'))
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: "{{ session('error') }}",
+                        confirmButtonColor: '#d33'
+                    });
+                @endif
+
+                @if(session('warning'))
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: "{{ session('warning') }}",
+                        confirmButtonColor: '#f1c40f'
+                    });
+                @endif
+
+                @if(session('info'))
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Heads up!',
+                        text: "{{ session('info') }}",
+                        confirmButtonColor: '#3498db'
+                    });
+                @endif
+      
+
+
         </script>
 
         @yield('scripts')
