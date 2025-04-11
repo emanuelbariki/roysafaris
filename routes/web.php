@@ -24,6 +24,7 @@ use App\Http\Controllers\TripTypeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\VehicleTypeController;
+use App\Http\Controllers\ActivityController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -96,7 +97,9 @@ Route::middleware(['auth'])->group(function () {
     //Route for Vehicle Type 
     Route::resource('vehicle-types', VehicleTypeController::class);
 
-    
+    //Route for Activities
+    Route::resource('activities', ActivityController::class);
+
     Route::get('carriers', [CarrierController::class, 'index'])->name('carriers.index');
     Route::post('carriers', [CarrierController::class, 'store'])->name('carriers.store');
     Route::put('carriers/{id}', [CarrierController::class, 'update'])->name('carriers.update');
