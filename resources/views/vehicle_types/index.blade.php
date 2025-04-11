@@ -2,8 +2,7 @@
 
 @section('content')
 <div class="container-fluid card-body">
-    <h4 class="mb-4">Bookings</h4>
-
+    <h4 class="mb-4">Vehicle Type</h4>
 
     <div class="col-lg-12">
         <div class="card">
