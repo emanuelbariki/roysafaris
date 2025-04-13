@@ -9,7 +9,7 @@ class Booking extends Model
     protected $fillable = [
         'ref',
         'group_name',
-        'nationality',
+        'country_id',
         'remarks',
         'file_owner',
         'agent_code',
@@ -29,5 +29,9 @@ class Booking extends Model
         'services' => 'array',
     ];
     
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 
 }

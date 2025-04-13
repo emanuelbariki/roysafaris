@@ -29,7 +29,7 @@
             <tr>
                 <td>{{ $booking->ref }}</td>
                 <td>{{ $booking->group_name }}</td>
-                <td>{{ $booking->nationality }}</td>
+                <td>{{ $booking->country->name }}</td>
                 <td>{{ $booking->booking_code }}</td>
                 <td>{{ $booking->arrival_date }}</td>
                 <td>{{ $booking->departure_date }}</td>

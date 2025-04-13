@@ -16,7 +16,7 @@ class BookingRequest extends FormRequest
         return [
             'ref' => 'required|string|max:255',
             'group_name' => 'required|string|max:255',
-            'nationality' => 'required|string|max:255',
+            'country_id' => 'required|string|max:255',
             'remarks' => 'nullable|string|max:1000',
             'file_owner' => 'nullable|string|max:255',
             'agent_code' => 'nullable|string|max:255',
@@ -29,8 +29,7 @@ class BookingRequest extends FormRequest
             'children' => 'nullable|integer|min:0',
             'infants' => 'nullable|integer|min:0',
             'rooms' => 'nullable|integer|min:0',
-            'services' => 'required|array|min:1',
-            'services.*' => 'string|in:accommodation,flight,transfers,restaurant,balloon,mountain,vehicle hire,activities',
+            'services' => 'nullable|array|min:1',
             'notes' => 'nullable|string|max:2000',
         ];
     }

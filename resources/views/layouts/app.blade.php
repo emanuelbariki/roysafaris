@@ -14,7 +14,7 @@
         <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico')}}">
 
         <!-- jvectormap -->
-        <link href="plugins/jvectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet">
+        <link href="{{ asset('plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
 
         <!-- App css -->
         <link href="{{ asset('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />

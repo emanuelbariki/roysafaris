@@ -29,7 +29,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="ref">Reference Number</label>
-                                            <input type="text" class="form-control" id="ref" name="ref" placeholder="Enter Reference" required>
+                                            <input type="text" class="form-control" id="ref" name="ref" placeholder="Enter Enquiry Reference" required>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -40,11 +40,16 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="nationality">Nationality</label>
-                                            <input type="text" class="form-control" id="nationality" name="nationality" placeholder="Nationality" required>
+                                            <label for="country_id">Contry Of Origin</label>
+                                            <select name="country_id" id="" class="form-control">
+                                                <option selected disabled> Choose </option>
+                                                @foreach ($countries as $c )
+                                                    <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="hide col-md-3">
                                         <div class="form-group">
                                             <label for="remarks">Remarks</label>
                                             <input type="text" class="form-control" id="remarks" name="remarks" placeholder="Enter Remarks">
@@ -54,7 +59,7 @@
 
                                 <h4>Booking Details</h4>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="hide col-md-4">
                                         <div class="form-group">
                                             <label for="file_owner">File Owner</label>
                                             <input type="text" class="form-control" id="file_owner" name="file_owner" placeholder="File Owner">
@@ -62,14 +67,29 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
+                                            <label for="channel_id">Channel</label>
+                                            <select name="channel_id" class="form-control" id="channel_id" required>
+                                                <option value="" selected disabled>Choose Channel</option>
+                                                @foreach ($channels as $c)
+                                                    <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group agents" style="display: none;">
                                             <label for="agent_code">Agent Code</label>
-                                            <input type="text" class="form-control" id="agent_code" name="agent_code" placeholder="Agent Code">
+                                            <select name="agent_code" class="form-control" id="agent_code">
+                                                <option value="" selected disabled>Select Agent</option>
+                                                @foreach ($agents as $ag)
+                                                    <option value="{{ $ag->id }}">{{ $ag->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="booking_code">Booking Code</label>
-                                            <input type="text" class="form-control text-danger font-weight-bold" id="booking_code" name="booking_code" placeholder="Booking Code" required>
+                                            <input type="text" value="{{ str_pad($booking_id+1, 3, '0', STR_PAD_LEFT) . "/" . now()->format('m/Y') }}" class="form-control text-danger font-weight-bold" id="booking_code" name="booking_code" placeholder="Booking Code" required>
                                         </div>
                                     </div>
                                 </div>
@@ -118,7 +138,7 @@
                                             <input type="number" class="form-control" id="infants" name="infants">
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="hide col-md-2">
                                         <div class="form-group">
                                             <label for="rooms">Rooms</label>
                                             <input type="number" class="form-control" id="rooms" name="rooms">
@@ -127,7 +147,7 @@
                                 </div>
 
                                 <h4>Services</h4>
-                                <div class="services mb-4">
+                                <div class="services mb-4 hide">
                                     @php
                                         $serviceList = ['Accommodation', 'Flight', 'Transfers', 'Restaurant', 'Balloon', 'Mountain', 'Vehicle Hire', 'Activities'];
                                     @endphp
@@ -166,29 +186,37 @@
 
     @push('scripts')
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const bookingForm = document.querySelector("form");
-            const serviceCheckboxes = document.querySelectorAll("input[name='services[]']");
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     const bookingForm = document.querySelector("form");
+        //     const serviceCheckboxes = document.querySelectorAll("input[name='services[]']");
 
-            bookingForm.addEventListener("submit", function (e) {
-                let isChecked = false;
-                serviceCheckboxes.forEach(cb => { if (cb.checked) isChecked = true });
-                if (!isChecked) {
-                    e.preventDefault();
-                    alert("Please select at least one service.");
-                }
-            });
+        //     bookingForm.addEventListener("submit", function (e) {
+        //         let isChecked = false;
+        //         serviceCheckboxes.forEach(cb => { if (cb.checked) isChecked = true });
+        //         if (!isChecked) {
+        //             e.preventDefault();
+        //             alert("Please select at least one service.");
+        //         }
+        //     });
 
-            const nationalityField = document.getElementById("nationality");
-            const remarksField = document.getElementById("remarks");
+        //     const nationalityField = document.getElementById("nationality");
+        //     const remarksField = document.getElementById("remarks");
 
-            nationalityField.addEventListener("input", function () {
-                if (nationalityField.value.toLowerCase().includes("indian")) {
-                    remarksField.value = "Provide PAN card copy";
-                } else {
-                    remarksField.value = "";
-                }
-            });
+        //     nationalityField.addEventListener("input", function () {
+        //         if (nationalityField.value.toLowerCase().includes("indian")) {
+        //             remarksField.value = "Provide PAN card copy";
+        //         } else {
+        //             remarksField.value = "";
+        //         }
+        //     });
+        // });
+
+        $('#channel_id').change(function() {
+            if ($(this).val() == 6) {
+                $('.agents').slideDown(300);
+            } else {
+                $('.agents').slideUp(300);
+            }            
         });
     </script>
     @endpush
