@@ -28,6 +28,7 @@ use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\NationalParkController;
 use App\Http\Controllers\ParkFeeController;
+use App\Http\Controllers\EnquiryController;
 
 // Default redirect
 Route::get('/', fn () => redirect()->route('dashboard'));
@@ -65,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
      */
     Route::middleware('role:Manager')->group(function () {
         Route::resource('bookings', BookingController::class);
+        Route::resource('enquiries', EnquiryController::class);
         Route::get('trips', [TripController::class, 'index'])->name('trips.index');
         Route::post('trips', [TripController::class, 'store'])->name('trips.store');
         Route::put('trips/{id}', [TripController::class, 'update'])->name('trips.update');

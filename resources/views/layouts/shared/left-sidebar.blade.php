@@ -62,7 +62,7 @@
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('vehicle-types.index') }}"><i class="ti-control-record"></i>Vehicle Type</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('activities.index') }}"><i class="ti-control-record"></i>Activities</a></li>
-                    <li class="nav-item"><a class="nav-link" href="apps-invoice.html"><i class="ti-control-record"></i>Invoice</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('enquiries.index') }}"><i class="ti-control-record"></i>Enquiries</a></li>
                     <li class="nav-item"><a class="nav-link" href="apps-tasks.html"><i class="ti-control-record"></i>Tasks</a></li>
 
                     <li>
