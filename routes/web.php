@@ -1,63 +1,96 @@
 <?php
 
-use App\Http\Controllers\AccommodationController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\CarrierController;
-use App\Http\Controllers\ChannelController;
-use App\Http\Controllers\CityController;
-use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DriverController;
-use App\Http\Controllers\DriverTypeController;
+use App\Http\Controllers\FleetTypeController;
 use App\Http\Controllers\FleetClassController;
 use App\Http\Controllers\FleetController;
-use App\Http\Controllers\FleetTypeController;
+use App\Http\Controllers\DriverTypeController;
 use App\Http\Controllers\HotelChainController;
-use App\Http\Controllers\MountainController;
-use App\Http\Controllers\MountainRouteController;
-use App\Http\Controllers\NationalParkController;
-use App\Http\Controllers\ParkFeeController;
-use App\Http\Controllers\ServiceItemController;
-use App\Http\Controllers\ServiceProviderController;
-use App\Http\Controllers\TripController;
+use App\Http\Controllers\AccommodationController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\TripTypeController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ServiceItemController;
+use App\Http\Controllers\TripController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\VehicleTypeController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\CarrierController;
+use App\Http\Controllers\ServiceProviderController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\MountainController;
+use App\Http\Controllers\MountainRouteController;
+use App\Http\Controllers\ChannelController;
+use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\NationalParkController;
+use App\Http\Controllers\ParkFeeController;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+// Default redirect
+Route::get('/', fn () => redirect()->route('dashboard'));
 
-Route::get('/', function () {
-    return redirect()->route('dashboard');
+// Auth Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'do_login'])->name('do.login');
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/register', [AuthController::class, 'do_register'])->name('do.register');
 });
 
-
-
-
-
-
-Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
-Route::post('/login', [AuthController::class, 'do_login'])->name('do.login')->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::get('/register', [AuthController::class, 'register'])->name('register')->middleware('guest');
-Route::post('/register', [AuthController::class, 'do_register'])->name('do.register')->middleware('guest');
-
-
-
-
+// Protected Routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('fleet-types', [FleetTypeController::class, 'index'])->name('fleettypes.index');
-    Route::post('fleet-types', [FleetTypeController::class, 'store'])->name('fleettypes.store');
-    Route::put('fleet-types/{id}', [FleetTypeController::class, 'update'])->name('fleettypes.update');
+    /**
+     * Admin-only Routes
+     */
+    Route::middleware('role:Admin')->group(function () {
+        Route::resource('users', UserController::class);
+        Route::resource('roles', RoleController::class);
+        Route::resource('permissions', PermissionController::class);
+        Route::post('roles/{role}/permissions', [RoleController::class, 'assignPermission'])->name('roles.assignPermissions');
+        Route::get('fleet-types', [FleetTypeController::class, 'index'])->name('fleettypes.index');
+        Route::post('fleet-types', [FleetTypeController::class, 'store'])->name('fleettypes.store');
+        Route::put('fleet-types/{id}', [FleetTypeController::class, 'update'])->name('fleettypes.update');
+
+    });
+
+    /**
+     * Manager Routes
+     */
+    Route::middleware('role:Manager')->group(function () {
+        Route::resource('bookings', BookingController::class);
+        Route::get('trips', [TripController::class, 'index'])->name('trips.index');
+        Route::post('trips', [TripController::class, 'store'])->name('trips.store');
+        Route::put('trips/{id}', [TripController::class, 'update'])->name('trips.update');
+    });
+
+    /**
+     * Driver-only Routes
+     */
+    Route::middleware('role:Driver')->group(function () {
+        Route::get('/get-driver-fleet/{driverId}', [DriverController::class, 'Ajax_getDriverFleet'])->name('ajax.get_driver_fleet');
+    });
+
+    /**
+     * Customer Support Routes
+     */
+    Route::middleware('role:Customer Support')->group(function () {
+        // Add customer support specific routes if needed
+    });
+
+    /**
+     * Accountant Routes
+     */
+    Route::middleware('role:Accountant')->group(function () {
+        // Add payment/report/refund related routes
+    });
+
 
     Route::get('fleet-classes', [FleetClassController::class, 'index'])->name('fleetclasses.index');
     Route::post('fleet-classes', [FleetClassController::class, 'store'])->name('fleetclasses.store');
@@ -71,11 +104,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('driver-types', [DriverTypeController::class, 'store'])->name('drivertypes.store');
     Route::put('driver-types/{id}', [DriverTypeController::class, 'update'])->name('drivertypes.update');
 
-    
     Route::get('hotel-chains', [HotelChainController::class, 'index'])->name('hotelchains.index');
     Route::post('hotel-chains', [HotelChainController::class, 'store'])->name('hotelchains.store');
     Route::put('hotel-chains/{id}', [HotelChainController::class, 'update'])->name('hotelchains.update');
-    
+
     Route::get('accommodations', [AccommodationController::class, 'index'])->name('accommodations.index');
     Route::post('accommodations', [AccommodationController::class, 'store'])->name('accommodations.store');
     Route::put('accommodations/{id}', [AccommodationController::class, 'update'])->name('accommodations.update');
@@ -83,8 +115,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('drivers', [DriverController::class, 'index'])->name('drivers.index');
     Route::post('drivers', [DriverController::class, 'store'])->name('drivers.store');
     Route::put('drivers/{id}', [DriverController::class, 'update'])->name('drivers.update');
-    Route::get('/get-driver-fleet/{driverId}', [DriverController::class, 'Ajax_getDriverFleet'])->name('ajax.get_driver_fleet');
-
 
     Route::get('trip-types', [TripTypeController::class, 'index'])->name('triptypes.index');
     Route::post('trip-types', [TripTypeController::class, 'store'])->name('triptypes.store');
@@ -94,35 +124,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('service-items', [ServiceItemController::class, 'store'])->name('serviceitems.store');
     Route::put('service-items/{id}', [ServiceItemController::class, 'update'])->name('serviceitems.update');
 
-    Route::get('trips', [TripController::class, 'index'])->name('trips.index');
-    Route::post('trips', [TripController::class, 'store'])->name('trips.store');
-    Route::put('trips/{id}', [TripController::class, 'update'])->name('trips.update');
-
-    //Route For Booking Process
-    Route::resource('bookings', BookingController::class);
-
-    //Route for Vehicle Type 
     Route::resource('vehicle-types', VehicleTypeController::class);
-
-    //Route for Activities
     Route::resource('activities', ActivityController::class);
-
-    //User Management
-    Route::resource('users', UserController::class);
-    Route::post('user/create', [UserController::class,'store'])->name('user.create');
-    //Roles and Permission
-    Route::resource('roles', RoleController::class);
-    Route::resource('permissions', PermissionController::class);
-    Route::post('roles/{role}/permissions', [RoleController::class,'assignPermission'])->name('roles.assignPermissions');
 
     Route::get('carriers', [CarrierController::class, 'index'])->name('carriers.index');
     Route::post('carriers', [CarrierController::class, 'store'])->name('carriers.store');
     Route::put('carriers/{id}', [CarrierController::class, 'update'])->name('carriers.update');
 
-    
     Route::get('service-providers', [ServiceProviderController::class, 'index'])->name('serviceproviders.index');
     Route::post('service-providers', [ServiceProviderController::class, 'store'])->name('serviceproviders.store');
     Route::put('service-providers/{id}', [ServiceProviderController::class, 'update'])->name('serviceproviders.update');
+
     Route::get('AjaxGetCities', [CityController::class, 'ajaxGetCitites'])->name('ajax.fetch.cities');
 
     Route::get('mountains', [MountainController::class, 'index'])->name('mountains.index');
@@ -148,8 +160,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('park-fees', [ParkFeeController::class, 'index'])->name('parkfees.index');
     Route::post('park-fees', [ParkFeeController::class, 'store'])->name('parkfees.store');
     Route::put('park-fees/{id}', [ParkFeeController::class, 'update'])->name('parkfees.update');
-    Route::get('ajax-park-fees-data}', [ParkFeeController::class, 'Ajax_parkFeesData'])->name('parkFeesData');
 
-
-
+    Route::get('ajax-park-fees-data', [ParkFeeController::class, 'Ajax_parkFeesData'])->name('parkFeesData');
 });
