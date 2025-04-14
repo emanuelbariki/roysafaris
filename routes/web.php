@@ -25,6 +25,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\VehicleTypeController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\UserController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -33,6 +36,10 @@ use App\Http\Controllers\ActivityController;
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
+
+
+
+
 
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
@@ -99,6 +106,14 @@ Route::middleware(['auth'])->group(function () {
 
     //Route for Activities
     Route::resource('activities', ActivityController::class);
+
+    //User Management
+    Route::resource('users', UserController::class);
+    Route::post('user/create', [UserController::class,'store'])->name('user.create');
+    //Roles and Permission
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
+    Route::post('roles/{role}/permissions', [RoleController::class,'assignPermission'])->name('roles.assignPermissions');
 
     Route::get('carriers', [CarrierController::class, 'index'])->name('carriers.index');
     Route::post('carriers', [CarrierController::class, 'store'])->name('carriers.store');
