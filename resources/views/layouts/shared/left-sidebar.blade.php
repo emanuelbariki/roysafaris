@@ -39,6 +39,8 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('channels.index') }}"><i class="ti-control-record"></i>Channels</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('currencies.index') }}"><i class="ti-control-record"></i>Currency</a></li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('parkfees.index') }}"><i class="ti-control-record"></i>Park Fees</a></li> 
+                    <li class="nav-item"><a class="nav-link" href="{{ route('agents.index') }}"><i class="ti-control-record"></i>Agents</a></li> 
+                    <li class="nav-item"><a class="nav-link" href="{{ route('lodges.index') }}"><i class="ti-control-record"></i>Lodges</a></li> 
                 </ul>
             </li>
 
@@ -60,6 +62,7 @@
                             <li><a href="{{ route('bookings.create') }}">Booking Create</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('reservations.index') }}"><i class="ti-control-record"></i>Reservations</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('vehicle-types.index') }}"><i class="ti-control-record"></i>Vehicle Type</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('activities.index') }}"><i class="ti-control-record"></i>Activities</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('enquiries.index') }}"><i class="ti-control-record"></i>Enquiries</a></li>

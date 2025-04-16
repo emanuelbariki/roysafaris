@@ -29,6 +29,9 @@ use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\NationalParkController;
 use App\Http\Controllers\ParkFeeController;
 use App\Http\Controllers\EnquiryController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\AgentController;
+use App\Http\Controllers\LodgeController;
 
 // Default redirect
 Route::get('/', fn () => redirect()->route('dashboard'));
@@ -58,8 +61,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('fleet-types', [FleetTypeController::class, 'index'])->name('fleettypes.index');
         Route::post('fleet-types', [FleetTypeController::class, 'store'])->name('fleettypes.store');
         Route::put('fleet-types/{id}', [FleetTypeController::class, 'update'])->name('fleettypes.update');
+        Route::resource('agents', AgentController::class);
+        Route::resource('lodges', LodgeController::class);
 
     });
+
+    Route::prefix('vouchers')->group(function () {
+        Route::post('/print', [App\Http\Controllers\VoucherController::class, 'print'])->name('voucher.print');
+        Route::post('/duplicate', [App\Http\Controllers\VoucherController::class, 'duplicate'])->name('voucher.duplicate');
+        Route::post('/amend', [App\Http\Controllers\VoucherController::class, 'amend'])->name('voucher.amend');
+        Route::post('/email', [App\Http\Controllers\VoucherController::class, 'email'])->name('voucher.email');
+    });
+    
 
     /**
      * Manager Routes
@@ -84,6 +97,10 @@ Route::middleware(['auth'])->group(function () {
      */
     Route::middleware('role:Customer Support')->group(function () {
         // Add customer support specific routes if needed
+        //Reservation module
+        Route::resource('reservations', ReservationController::class);
+        Route::post('reservations/{reservation}/confirm', [ReservationController::class, 'confirm'])->name('reservations.confirm');
+       
     });
 
     /**
@@ -92,6 +109,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('role:Accountant')->group(function () {
         // Add payment/report/refund related routes
     });
+
 
 
     Route::get('fleet-classes', [FleetClassController::class, 'index'])->name('fleetclasses.index');
