@@ -44,11 +44,11 @@
                     <div class="col-6">
                         <label class="form-label">Day Room</label>
                         <select class="form-select @error('day_room') is-invalid @enderror" name="day_room">
-                            <option value="Y"
-                                {{ old('day_room', $reservation->day_room ?? '') == 'Y' ? 'selected' : '' }}>Yes
+                            <option value="1"
+                                {{ old('day_room', $reservation->day_room ?? '') == '1' ? 'selected' : '' }}>Yes
                             </option>
-                            <option value="N"
-                                {{ old('day_room', $reservation->day_room ?? '') == 'N' ? 'selected' : '' }}>No</option>
+                            <option value="0"
+                                {{ old('day_room', $reservation->day_room ?? '') == '0' ? 'selected' : '' }}>No</option>
                         </select>
                         @error('day_room') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
@@ -81,7 +81,7 @@
                 <div class="col-md-6">
                     <label class="form-label">Total Pax</label>
                     <input type="number" name="total_pax" class="form-control @error('total_pax') is-invalid @enderror"
-                        value="{{ old('total_pax', $reservation->total_pax ?? '') }}" readonly>
+                        value="{{ old('total_pax', $reservation->total_pax ?? '') }}" >
                     @error('total_pax') <small class="text-danger">{{ $message }}</small> @enderror
                 </div>
             </div>

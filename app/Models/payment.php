@@ -10,10 +10,10 @@ class payment extends Model
         'reservation_id',
         'date',
         'currency_id',
-        'amount',
-        'payment_method',
-        'mode',
-        'details',
+        'payment_amount',
+        'payment_date',
+        'payment_mode',
+        'payment_details',
     ];
 
     public function reservation()

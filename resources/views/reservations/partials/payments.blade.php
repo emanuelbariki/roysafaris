@@ -13,31 +13,72 @@
                 </tr>
             </thead>
             <tbody id="paymentBody">
-                <tr class="payment-row">
-                    <td><input type="date" name="payment_date[]" class="form-control form-control-sm"></td>
-                    <td>
-                        <select name="payment_currency[]" class="form-select form-select-sm">
-                            @foreach($currencies as $currency)
-                                <option value="{{ $currency->id }}">{{ $currency->name }}</option>
-                            @endforeach
-                        </select>
-                    </td>
-                    <td><input type="number" name="payment_amount[]" class="form-control form-control-sm payment-amount" step="0.01" min="0"></td>
-                    <td>
-                        <select name="payment_mode[]" class="form-select form-select-sm">
-                            <option>Cash</option>
-                            <option>Credit Card</option>
-                            <option>Bank Transfer</option>
-                        </select>
-                    </td>
-                    <td><input type="text" name="payment_details[]" class="form-control form-control-sm"></td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-outline-success add-row"><i class="fas fa-plus"></i></button>
-                    </td>
-                </tr>
+                @if($reservation->payments && $reservation->payments->count())
+                    @foreach($reservation->payments as $index => $payment)
+                        <tr class="payment-row">
+                            <td><input type="date" name="payment_date[]" class="form-control form-control-sm"
+                                value="{{ old('payment_date.' . $index, $payment->payment_date) }}"></td>
+
+                            <td>
+                                <select name="currency_id[]" class="form-select form-select-sm">
+                                    @foreach($currencies as $currency)
+                                        <option value="{{ $currency->id }}" {{ $currency->id == $payment->currency_id ? 'selected' : '' }}>
+                                            {{ $currency->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </td>
+
+                            <td><input type="number" name="payment_amount[]" class="form-control form-control-sm payment-amount"
+                                value="{{ old('payment_amount.' . $index, $payment->payment_amount) }}" step="0.01" min="0"></td>
+
+                            <td>
+                                <select name="payment_mode[]" class="form-select form-select-sm">
+                                    <option {{ $payment->payment_mode == 'Cash' ? 'selected' : '' }}>Cash</option>
+                                    <option {{ $payment->payment_mode == 'Credit Card' ? 'selected' : '' }}>Credit Card</option>
+                                    <option {{ $payment->payment_mode == 'Bank Transfer' ? 'selected' : '' }}>Bank Transfer</option>
+                                </select>
+                            </td>
+
+                            <td><input type="text" name="payment_details[]" class="form-control form-control-sm"
+                                value="{{ old('payment_details.' . $index, $payment->payment_details) }}"></td>
+
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-success add-row"><i class="fas fa-plus"></i></button>
+                                @if($index >0)
+                                    <button type="button" class="btn btn-sm btn-outline-danger remove-row"><i class="fas fa-trash"></i></button>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr class="payment-row">
+                        <td><input type="date" name="payment_date[]" class="form-control form-control-sm"></td>
+                        <td>
+                            <select name="currency_id[]" class="form-select form-select-sm">
+                                @foreach($currencies as $currency)
+                                    <option value="{{ $currency->id }}">{{ $currency->name }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td><input type="number" name="payment_amount[]" class="form-control form-control-sm payment-amount" step="0.01" min="0"></td>
+                        <td>
+                            <select name="payment_mode[]" class="form-select form-select-sm">
+                                <option>Cash</option>
+                                <option>Credit Card</option>
+                                <option>Bank Transfer</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="payment_details[]" class="form-control form-control-sm"></td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-success add-row"><i class="fas fa-plus"></i></button>
+                        </td>
+                    </tr>
+                @endif
+
                 <tr>
                     <td colspan="5" class="text-end fw-bold">TOTAL</td>
-                    <td class="fw-bold" id="totalAmount">$0.00</td>
+                    <td class="fw-bold" id="totalAmount">0.00</td>
                 </tr>
             </tbody>
         </table>

@@ -1,7 +1,6 @@
-
 <!-- Internal Information Section -->
 @php
-    $reservation = $reservation ?? new \App\Models\Reservation();
+$reservation = $reservation ?? new \App\Models\Reservation();
 @endphp
 
 <div class="card shadow-sm rounded mb-4">
@@ -11,12 +10,14 @@
         </h6>
         <div class="row g-3">
             <div class="col-md-3">
-                <label for="user_id" class="form-label">User ID</label>
-                <input type="text" name="user_id" id="user_id" 
-                    value="{{ old('user_id', $reservation->user_id ?? 'SPANDIT') }}"
-                    class="form-control @error('user_id') is-invalid @enderror" readonly>
-                @error('user_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                <label for="user_display" class="form-label">User</label>
+                <input type="text" id="user_display" value="{{ $reservation->user->name ?? auth()->user()->name }}"
+                    class="form-control" readonly>
+
+                <input type="hidden" name="user_id"
+                    value="{{ old('user_id', $reservation->user_id ?? auth()->user()->id) }}">
             </div>
+
 
             <div class="col-md-3">
                 <label for="booking_date" class="form-label">Booking Date</label>

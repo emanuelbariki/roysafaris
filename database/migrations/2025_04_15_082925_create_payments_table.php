@@ -16,10 +16,10 @@ return new class extends Migration
             $table->foreignId('reservation_id')->constrained()->onDelete('cascade');
             $table->date('date');
             $table->foreignId('currency_id')->constrained()->onDelete('cascade');
-            $table->decimal('amount', 10, 2);
-            $table->string('payment_method');
-            $table->string('mode');
-            $table->string('details')->nullable();
+            $table->decimal('payment_amount', 10, 2);
+            $table->string('payment_date');
+            $table->string('payment_mode');
+            $table->string('payment_details')->nullable();
             $table->timestamps();
         });
     }

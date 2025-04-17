@@ -60,9 +60,10 @@
             <div class="container-fluid">
                 <span class="navbar-brand fw-bold text-primary">Reservations </span>
                 <div class="d-flex">
-                    <button class="btn btn-sm btn-outline-secondary me-2">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
+
+                    <a href="{{route('reservations.index')}}" class="btn btn-sm btn-outline-warning me-2">
+                        <i class="fas fa-chevron-left me-1"></i>Back
+    </a>
                     <button class="btn btn-sm btn-outline-primary me-2">
                         <i class="fas fa-search me-1"></i>Find
                     </button>
