@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\voucher;
+use App\Models\reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Models\room;
 
 class VoucherController extends Controller
 {
@@ -98,5 +100,38 @@ class VoucherController extends Controller
         return response()->json([
             'message' => 'Voucher emailed successfully'
         ]);
+    }
+    public function printContent($id)
+    {
+        $voucher = Reservation::with(['user', 'payments'])->findOrFail($id);
+        $rooms = [];
+        $title = 'Voucher';
+
+        $roomIds = json_decode($voucher->room_detail, true);
+        $selectedRooms = Room::whereIn('id', $roomIds)->get();
+
+        $roomCounts = [
+            'Single' => 0,
+            'Double' => 0,
+            'Triple' => 0,
+            'Suite' => 0
+        ];
+
+        foreach ($selectedRooms as $room) {
+            $type = strtolower($room->name);
+            if (str_contains($type, 'single')) {
+                $roomCounts['Single']++;
+            } elseif (str_contains($type, 'double') || str_contains($type, 'twin')) {
+                $roomCounts['Double']++;
+            } elseif (str_contains($type, 'triple')) {
+                $roomCounts['Triple']++;
+            } elseif (str_contains($type, 'suite')) {
+                $roomCounts['Suite']++;
+            }
+        }
+        // var_dump($voucher);
+        // die();
+        return view('vouchers.print', compact('voucher','rooms', 'title','roomCounts',
+        'selectedRooms' ));
     }
 }

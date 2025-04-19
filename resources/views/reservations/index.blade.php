@@ -33,7 +33,8 @@
                             <td>{{ $reservation->departure }}</td>
                             <td>{{ $reservation->status }}</td>
                             <td class="d-flex justify-content-around">
-                                <a href="{{ route('reservations.edit', $reservation) }}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{{ route('reservations.edit', $reservation) }}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{{ route('voucher.print.content', $reservation->id) }}" class="btn btn-sm btn-primary">Print Voucher</a>
                                 <form action="{{ route('reservations.destroy', $reservation) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')

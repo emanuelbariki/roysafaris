@@ -32,6 +32,7 @@ use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\LodgeController;
+use App\Http\Controllers\VoucherController;
 
 // Default redirect
 Route::get('/', fn () => redirect()->route('dashboard'));
@@ -67,10 +68,12 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('vouchers')->group(function () {
-        Route::post('/print', [App\Http\Controllers\VoucherController::class, 'print'])->name('voucher.print');
-        Route::post('/duplicate', [App\Http\Controllers\VoucherController::class, 'duplicate'])->name('voucher.duplicate');
-        Route::post('/amend', [App\Http\Controllers\VoucherController::class, 'amend'])->name('voucher.amend');
-        Route::post('/email', [App\Http\Controllers\VoucherController::class, 'email'])->name('voucher.email');
+        Route::post('/print', [VoucherController::class, 'print'])->name('voucher.print');
+        Route::post('/duplicate', [VoucherController::class, 'duplicate'])->name('voucher.duplicate');
+        Route::post('/amend', [VoucherController::class, 'amend'])->name('voucher.amend');
+        Route::post('/email', [VoucherController::class, 'email'])->name('voucher.email');
+        
+
     });
     
 
@@ -111,6 +114,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+    Route::get('/voucher/{id}/print-content', [VoucherController::class, 'printContent'])->name('voucher.print.content');
 
     Route::get('fleet-classes', [FleetClassController::class, 'index'])->name('fleetclasses.index');
     Route::post('fleet-classes', [FleetClassController::class, 'store'])->name('fleetclasses.store');
