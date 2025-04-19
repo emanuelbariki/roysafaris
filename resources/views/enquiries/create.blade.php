@@ -112,11 +112,9 @@
                                 <label for="referral_source" class="form-label ">How did you find us?</label>
                                 <select class="form-select form-control" id="referral_source" name="referral_source" required>
                                     <option value="" selected disabled>Select an option</option>
-                                    <option value="google">Google Search</option>
-                                    <option value="social">Social Media</option>
-                                    <option value="recommendation">Friend/Family Recommendation</option>
-                                    <option value="travel_agent">Travel Agent</option>
-                                    <option value="other">Other</option>
+                                    @foreach ($channels as $c)
+                                        <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-4">
@@ -230,19 +228,19 @@
                             <div class="col-md-6">
                                 <label for="fileOwner" class="form-label">File Owner</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="fileOwner" value="Rachael">
-                                    <button class="btn btn-outline-secondary" type="button" id="updateOwnerBtn">Update</button>
+                                    <input type="text" class="form-control" disabled id="fileOwner" value="{{ Auth::user()->name }}">
+                                    {{-- <button class="btn btn-outline-secondary" type="button" id="updateOwnerBtn">Update</button> --}}
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="hide col-md-6">
                                 <label for="nextAction" class="form-label">Next Action</label>
                                 <input type="text" class="form-control" id="nextAction">
                             </div>
-                            <div class="col-md-6">
+                            <div class="hide col-md-6">
                                 <label for="nextActionDate" class="form-label">Next Action Date</label>
                                 <input type="date" class="form-control" id="nextActionDate">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 hide">
                                 <label for="priority" class="form-label">Priority</label>
                                 <select class="form-select form-control" id="priority">
                                     <option value="low">Low</option>
