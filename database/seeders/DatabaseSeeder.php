@@ -17,7 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call(RolePermissionSeeder::class);
         $this->call(AdminUserSeeder::class);
         $this->call(RoomSeeder::class);
-        
+        $this->call(CountriesSeeder::class);
+        $this->call(PickupDropoffPointSeeder::class);
+
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',

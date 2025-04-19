@@ -37,7 +37,7 @@
 
     </head>
 
-    <body class="dark-sidenav">
+    <body class="dark-sidenav theme-dark dark-body" data-bs-theme="dark">
         <!-- Left Sidenav -->
         @include('layouts.shared.left-sidebar')
         <!-- end left-sidenav-->

@@ -29,7 +29,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="ref">Reference Number</label>
-                                            <input type="text" class="form-control" id="ref" name="ref" placeholder="Enter Reference" required>
+                                            <input type="text" class="form-control" id="ref" name="ref" placeholder="Enter Reference">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -40,11 +40,15 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="nationality">Nationality</label>
-                                            <input type="text" class="form-control" id="nationality" name="nationality" placeholder="Nationality" required>
+                                            <label for="country_id">country_id</label>
+                                            <select name="country_id" id="" class="form-control">
+                                                @foreach ($countries as $country)
+                                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 hide">
                                         <div class="form-group">
                                             <label for="remarks">Remarks</label>
                                             <input type="text" class="form-control" id="remarks" name="remarks" placeholder="Enter Remarks">
@@ -52,27 +56,59 @@
                                     </div>
                                 </div>
 
-                                <h4>Booking Details</h4>
-                                <div class="row">
-                                    <div class="col-md-4">
+                                <h4 class="mb-3">Booking Details</h4>
+
+                                <div class="row g-3">
+                                    <!-- File Owner -->
+                                    <div class="col-md-2">
                                         <div class="form-group">
-                                            <label for="file_owner">File Owner</label>
-                                            <input type="text" class="form-control" id="file_owner" name="file_owner" placeholder="File Owner">
+                                            <label for="file_owner_display" class="form-label">File Owner</label>
+                                            <input type="text" class="form-control" id="file_owner_display" value="{{ Auth::user()->name }}" disabled>
+                                            <input type="hidden" id="file_owner" name="file_owner" value="{{ Auth::user()->id }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+
+                                    <!-- Source -->
+                                    <div class="col-md-2">
                                         <div class="form-group">
-                                            <label for="agent_code">Agent Code</label>
-                                            <input type="text" class="form-control" id="agent_code" name="agent_code" placeholder="Agent Code">
+                                            <label for="channel_id" class="form-label">Source</label>
+                                            <select name="channel_id" onchange="displayAgentCode(this)" id="channel_id" class="form-control form-select">
+                                                <option value="">Select Source</option>
+                                                @foreach ($channels as $channel)
+                                                    <option value="{{ $channel->id }}">{{ $channel->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+
+                                    <!-- Agent Code -->
+                                    <div class="col-md-2" id="agent_code_div" style="display: none;">
                                         <div class="form-group">
-                                            <label for="booking_code">Booking Code</label>
-                                            <input type="text" class="form-control text-danger font-weight-bold" id="booking_code" name="booking_code" placeholder="Booking Code" required>
+                                            <label for="agent_code" class="form-label">Agents</label>
+                                            <select name="agent_code" id="agent_code" class="form-select form-control">
+                                                <option value="">Choose Agent</option>
+                                                @foreach ($agents as $agent)
+                                                    <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Booking Code -->
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="booking_code" class="form-label">Booking Code</label>
+                                            <input type="text" 
+                                                id="booking_code" 
+                                                name="booking_code" 
+                                                value="{{ str_pad($lastBooking+1, 3, '0', STR_PAD_LEFT) . "/" . now()->format('m/Y') }}" 
+                                                class="form-control text-danger fw-bold" 
+                                                placeholder="Booking Code" 
+                                                required>
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <h4>Travel Info</h4>
                                 <div class="row">
@@ -83,7 +119,13 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="pickup_details">Pick-up Details</label>
-                                            <input type="text" class="form-control" id="pickup_details" name="pickup_details">
+                                            {{-- <input type="text" class="form-control" id="pickup_details" name="pickup_details"> --}}
+                                            <select name="pickup_details" class="form-control" id="">
+                                                <option value="Choose"></option>
+                                                @foreach ($pickup_dropoff_points as $pickup_dropoff_point)
+                                                    <option value="{{ $pickup_dropoff_point->id }}">{{ $pickup_dropoff_point->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -93,32 +135,38 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="drop_details">Drop-off Details</label>
-                                            <input type="text" class="form-control" id="drop_details" name="drop_details">
+                                            {{-- <input type="text" class="form-control" id="drop_details" name="drop_details"> --}}
+                                            <select name="drop_details" class="form-control" id="">
+                                                <option value="Choose"></option>
+                                                @foreach ($pickup_dropoff_points as $pickup_dropoff_point)
+                                                    <option value="{{ $pickup_dropoff_point->id }}">{{ $pickup_dropoff_point->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
 
                                 <h4>Guest Counts</h4>
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="adults">Adults</label>
                                             <input type="number" class="form-control" id="adults" name="adults">
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="children">Children</label>
                                             <input type="number" class="form-control" id="children" name="children">
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="infants">Infants</label>
                                             <input type="number" class="form-control" id="infants" name="infants">
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="hide col-md-2">
                                         <div class="form-group">
                                             <label for="rooms">Rooms</label>
                                             <input type="number" class="form-control" id="rooms" name="rooms">
@@ -164,8 +212,28 @@
         </div>
     </div>
 
-    @push('scripts')
+    @section('scripts')
     <script>
+        function displayAgentCode(obj) {
+            console.log("Source selected: " + obj.value);
+    
+            if (obj.value == 6) {
+                document.getElementById('agent_code_div').style.display = 'block';
+            } else {
+                document.getElementById('agent_code_div').style.display = 'none';
+                document.getElementById('agent_code').value = '';
+            }
+        }
+        // On page load, hide the agent code field initially
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('agent_code_div').style.display = 'none';
+        });
+    </script>
+    @endsection
+    @push('scripts')
+    
+    <script>
+
         document.addEventListener("DOMContentLoaded", function () {
             const bookingForm = document.querySelector("form");
             const serviceCheckboxes = document.querySelectorAll("input[name='services[]']");
@@ -179,11 +247,11 @@
                 }
             });
 
-            const nationalityField = document.getElementById("nationality");
+            const country_idField = document.getElementById("country_id");
             const remarksField = document.getElementById("remarks");
 
-            nationalityField.addEventListener("input", function () {
-                if (nationalityField.value.toLowerCase().includes("indian")) {
+            country_idField.addEventListener("input", function () {
+                if (country_idField.value.toLowerCase().includes("indian")) {
                     remarksField.value = "Provide PAN card copy";
                 } else {
                     remarksField.value = "";
