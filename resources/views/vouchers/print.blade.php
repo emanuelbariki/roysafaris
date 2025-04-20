@@ -40,13 +40,13 @@
         <table class="table table-sm">
             <tr>
                 <td><strong>TO</strong></td>
-                <td>{{ $voucher->property_name }}</td>
+                <td>{{ $voucher->accommodation->name }}</td>
                 <td><strong>BOOKING STATUS</strong></td>
                 <td><strong>AMENDMENT</strong></td>
             </tr>
             <tr>
                 <td><strong>GUEST NAME</strong></td>
-                <td>{{ $voucher->guest_name }}</td>
+                <td>{{ $voucher->booking->group_name }}</td>
                 <td><strong>PRIOR VOUCHER NO</strong></td>
                 <td>{{ $voucher->prior_version }}</td>
             </tr>

@@ -103,7 +103,9 @@ class VoucherController extends Controller
     }
     public function printContent($id)
     {
-        $voucher = Reservation::with(['user', 'payments'])->findOrFail($id);
+        $voucher = Reservation::with(['user', 'payments','accommodation'])->findOrFail($id);
+
+        // dd($voucher->accommodation->name);
         $rooms = [];
         $title = 'Voucher';
 

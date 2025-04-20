@@ -13,40 +13,21 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-user"></i> View
-                        </button>
-                    </td>
-                    <td>19.05.2025</td>
-                    <td>TATULIP</td>
-                    <td><span class="status-badge status-confirmed">CONFIRMED</span></td>
-                </tr>
-                <tr>
-                    <td>Duplicate</td>
-                    <td>20.05.2025</td>
-                    <td>SSSL</td>
-                    <td><span class="status-badge status-confirmed">CONFIRMED</span></td>
-                </tr>
-                <tr>
-                    <td>Next Day</td>
-                    <td>22.05.2025</td>
-                    <td>INTIMATE</td>
-                    <td><span class="status-badge status-confirmed">CONFIRMED</span></td>
-                </tr>
-                <tr>
-                    <td>Close</td>
-                    <td>24.05.2025</td>
-                    <td>TRAN</td>
-                    <td><span class="status-badge status-confirmed">CONFIRMED</span></td>
-                </tr>
-                <tr>
-                    <td>SERVICE VOUCHERS</td>
-                    <td>26.05.2025</td>
-                    <td>TATULIP</td>
-                    <td><span class="status-badge status-confirmed">CONFIRMED</span></td>
-                </tr>
+                @if (isset($otherReservations) && $otherReservations->isNotEmpty())
+                    @foreach ($otherReservations as $reservation)
+                        <tr>
+                            <td>{{ $reservation->booking->group_name }}</td>
+                            <td>{{ $reservation->arrival }}</td>
+                            <td>{{ $reservation->accommodation->name }}</td>
+                            <td>{{ $reservation->status }}</td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="4" class="text-center">No accommodation summary available.</td>
+                    </tr>
+                    
+                @endif
             </tbody>
         </table>
     </div>

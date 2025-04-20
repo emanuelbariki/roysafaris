@@ -34,9 +34,8 @@
 
                             <td>
                                 <select name="payment_mode[]" class="form-select form-select-sm">
-                                    <option {{ $payment->payment_mode == 'Cash' ? 'selected' : '' }}>Cash</option>
-                                    <option {{ $payment->payment_mode == 'Credit Card' ? 'selected' : '' }}>Credit Card</option>
-                                    <option {{ $payment->payment_mode == 'Bank Transfer' ? 'selected' : '' }}>Bank Transfer</option>
+                                    <option {{ $payment->payment_mode == 'Client' ? 'selected' : '' }}>Client</option>
+                                    <option {{ $payment->payment_mode == 'Company' ? 'selected' : '' }}>Company</option>
                                 </select>
                             </td>
 
@@ -64,9 +63,8 @@
                         <td><input type="number" name="payment_amount[]" class="form-control form-control-sm payment-amount" step="0.01" min="0"></td>
                         <td>
                             <select name="payment_mode[]" class="form-select form-select-sm">
-                                <option>Cash</option>
-                                <option>Credit Card</option>
-                                <option>Bank Transfer</option>
+                                <option>Client</option>
+                                <option>Company</option>
                             </select>
                         </td>
                         <td><input type="text" name="payment_details[]" class="form-control form-control-sm"></td>

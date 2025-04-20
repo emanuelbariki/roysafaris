@@ -22,6 +22,7 @@
                 <th>Arrival</th>
                 <th>Departure</th>
                 <th>Actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,23 @@
                 <td>{{ $booking->booking_code }}</td>
                 <td>{{ $booking->arrival_date }}</td>
                 <td>{{ $booking->departure_date }}</td>
+                <td>
+                    @if ($booking->services)
+                    <ul>
+                        @foreach (json_decode($booking->services) as $s)
+                            @php
+                                if ($s == 'accommodation') {
+                                    $link = route('reservations.create', ['booking_id' => $booking->id]);
+                                }
+                            @endphp
+                            <li class="capitalize underline">
+                                <a href="{{ $link }}">{{ $s }}</a>
+                            </li>
+                        @endforeach
+                        
+                    </ul>
+                    @endif
+                </td>
                 <td>
                     <a href="{{ route('bookings.edit', $booking) }}" class="btn btn-sm btn-warning">Edit</a>
                     <form action="{{ route('bookings.destroy', $booking) }}" method="POST" class="d-inline"

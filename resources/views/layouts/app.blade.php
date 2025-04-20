@@ -33,6 +33,21 @@
             .uppercase{
                 text-transform: uppercase;
             }
+            .capitalize{
+                text-transform: capitalize;
+            }
+            .capitalize-first{
+                text-transform: capitalize;
+            }
+            .capitalize-first::first-letter{
+                text-transform: capitalize;
+            }
+            .capitalize-first::first-letter{
+                text-transform: capitalize;
+            }
+            .underline{
+                text-decoration: underline;
+            }
         </style>
 
     </head>

@@ -9,36 +9,38 @@ class reservation extends Model
 {
     use HasFactory;
 
-        protected $fillable = [
-            'guest_name',
-            'agent_id',
-            'country_id',
-            'total_rooms',
-            'total_pax',
-            'lodge_id',
-            'arrival',
-            'arrival_time',
-            'property_name',
-            'booking_code',
-            'departure',
-            'nights',
-            'adults',
-            'children',
-            'juniors',
-            'infants',
-            'day_room',
-            'user_id',
-            'booking_date',
-            'internal_ref',
-            'reservation_code',
-            'room_detail',
-            'guest_notes',
-            'internal_remarks',
-            'current_version',
-            'prior_version',
-            'voucher_issue_date',
-            'issue_date',
-        ];
+        // protected $fillable = [
+        //     'guest_name',
+        //     'agent_id',
+        //     'country_id',
+        //     'total_rooms',
+        //     'total_pax',
+        //     'lodge_id',
+        //     'arrival',
+        //     'arrival_time',
+        //     'property_name',
+        //     'booking_code',
+        //     'departure',
+        //     'nights',
+        //     'adults',
+        //     'children',
+        //     'juniors',
+        //     'infants',
+        //     'day_room',
+        //     'user_id',
+        //     'booking_date',
+        //     'internal_ref',
+        //     'reservation_code',
+        //     'room_detail',
+        //     'guest_notes',
+        //     'internal_remarks',
+        //     'current_version',
+        //     'prior_version',
+        //     'voucher_issue_date',
+        //     'issue_date',
+        // ];
+
+        protected $guarded = [];
 
 
         // Define the relationship with the User model
@@ -62,6 +64,18 @@ class reservation extends Model
         // Define the relationship with the Voucher model
         public function voucher()
         {
-            return $this->hasOne(Voucher::class);
+            return $this->hasOne(Voucher::class, 'ref_id');
         }
+
+        public function accommodation()
+        {
+            return $this->belongsTo(Accommodation::class, 'lodge_id');
+        }
+
+        public function booking()
+        {
+            return $this->hasOne(Booking::class, 'id', 'booking_id');
+        }
+
+        
 }

@@ -102,6 +102,7 @@ Route::middleware(['auth'])->group(function () {
         // Add customer support specific routes if needed
         //Reservation module
         Route::resource('reservations', ReservationController::class);
+        Route::get('reservations/{booking_id}', [ReservationController::class, 'make'])->name('reservations.make');
         Route::post('reservations/{reservation}/confirm', [ReservationController::class, 'confirm'])->name('reservations.confirm');
        
     });

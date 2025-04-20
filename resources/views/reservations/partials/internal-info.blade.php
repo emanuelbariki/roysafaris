@@ -27,18 +27,18 @@ $reservation = $reservation ?? new \App\Models\Reservation();
                 @error('booking_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
                 <label for="internal_ref" class="form-label">Internal Ref</label>
                 <input type="text" name="internal_ref" id="internal_ref"
                     value="{{ old('internal_ref', $reservation->internal_ref ?? '54111') }}"
                     class="form-control @error('internal_ref') is-invalid @enderror">
                 @error('internal_ref') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
+            </div> --}}
 
             <div class="col-md-3">
                 <label for="reservation_code" class="form-label">Reservations Code</label>
                 <input type="text" name="reservation_code" id="reservation_code"
-                    value="{{ old('reservation_code', $reservation->reservation_code ?? '2003/2025') }}"
+                    value="{{ old('reservation_code', $reservation->reservation_code ?? $reservationCode) }}"
                     class="form-control @error('reservation_code') is-invalid @enderror">
                 @error('reservation_code') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>

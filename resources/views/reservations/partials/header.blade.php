@@ -58,7 +58,7 @@
         <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
             <div class="container-fluid">
-                <span class="navbar-brand fw-bold text-primary">Reservations </span>
+                <span class="navbar-brand fw-bold text-primary">Reservations :  {{ $booking->group_name }}</span>
                 <div class="d-flex">
 
                     <a href="{{route('reservations.index')}}" class="btn btn-sm btn-outline-warning me-2">

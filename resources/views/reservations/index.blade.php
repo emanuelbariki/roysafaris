@@ -28,7 +28,7 @@
                     @foreach($reservations as $reservation)
                         <tr>
                             <td>{{ $reservation->id }}</td>
-                            <td>{{ $reservation->guest_name }}</td>
+                            <td>{{ $reservation->booking->group_name }}</td>
                             <td>{{ $reservation->arrival }}</td>
                             <td>{{ $reservation->departure }}</td>
                             <td>{{ $reservation->status }}</td>
