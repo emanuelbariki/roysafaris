@@ -10,7 +10,6 @@ class Fleet extends Model
     protected $guarded = [];
 
 
-    
     /**
      * Relationship with FleetType.
      */
