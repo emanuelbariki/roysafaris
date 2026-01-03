@@ -2,124 +2,82 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\SystemModule;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        $permissions = [
-            'create user',
-            'edit user',
-            'delete user',
-            'view user',
-            'assign roles',
+        Role::query()->create([
+            'name' => 'admin',
+            'description' => 'web'
+        ]);
 
-            'view tour',
-            'create tour',
-            'edit tour',
-            'delete tour',
-            'publish/unpublish packages',
 
-            'view bookings',
-            'create bookings',
-            'edit bookings',
-            'cancel bookings',
-            'confirm bookings',
-
-            'view vehicles',
-            'add vehicle',
-            'assign vehicle to tour',
-
-            'view guides/drivers',
-            'assign guide/driver to tour',
-            'update guide/driver availability',
-
-            'view payments',
-            'confirm payments',
-            'issue refunds',
-            'generate invoice',
-            'view reports',
-
-            'view inquiries',
-            'reply inquiries',
-
-            'manage settings',
-            'manage permissions',
-            'manage roles',
+        $modules = [
+            'Dashboard' => [
+                ['ability' => 'view::dashboard', 'name' => 'View Dashboard'],
+                ['ability' => 'dashboard::access', 'name' => 'Access Dashboard'],
+            ],
+            'Users' => [
+                ['ability' => 'create::user', 'name' => 'Create User'],
+                ['ability' => 'edit::user', 'name' => 'Edit User'],
+                ['ability' => 'delete::user', 'name' => 'Delete User'],
+                ['ability' => 'view::user', 'name' => 'View User'],
+                ['ability' => 'user::manage', 'name' => 'Manage User'],
+            ],
+            'Roles' => [
+                ['ability' => 'create::role', 'name' => 'Create Role'],
+                ['ability' => 'edit::role', 'name' => 'Edit Role'],
+                ['ability' => 'delete::role', 'name' => 'Delete Role'],
+                ['ability' => 'view::role', 'name' => 'View Role'],
+                ['ability' => 'role::manage', 'name' => 'Manage Role'],
+            ],
+            'Permissions' => [
+                ['ability' => 'create::permission', 'name' => 'Create Permission'],
+                ['ability' => 'edit::permission', 'name' => 'Edit Permission'],
+                ['ability' => 'delete::permission', 'name' => 'Delete Permission'],
+                ['ability' => 'view::permission', 'name' => 'View Permission'],
+                ['ability' => 'permission::manage', 'name' => 'Manage Permission'],
+            ],
         ];
 
-        // Create permissions
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+        try {
+            DB::beginTransaction();
+            foreach ($modules as $moduleName => $permissions) {
+                $module = SystemModule::query()->firstOrCreate(
+                    [
+                        'slug' => strtolower(str_replace(' ', '-', $moduleName))
+                    ]
+                );
+
+                // Seed permissions for this module
+                foreach ($permissions as $permission) {
+                    Permission::query()->updateOrCreate(
+                        [
+                            'ability' => $permission['ability'],
+                            'system_module_id' => $module->id,
+                        ],
+                        [
+                            'description' => $permission['name'],
+                        ]
+                    );
+                }
+            }
+
+            $permission_ids = Permission::pluck('id');
+            $superadmin = Role::query()->where('name', 'admin')->first();
+            $superadmin?->permissions()->sync($permission_ids);
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+            Log::error('Error seeding permissions: ' . $e->getMessage());
         }
-
-        // Role: Admin (All permissions)
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $admin->syncPermissions(Permission::all());
-
-        // Role: Tourist
-        $tourist = Role::firstOrCreate(['name' => 'Tourist']);
-        $tourist->syncPermissions([
-            'view tour',
-            'create bookings',
-            'view bookings',
-            'cancel bookings',
-            'view payments',
-            'view inquiries',
-            'reply inquiries',
-        ]);
-
-        // Role: Manager
-        $manager = Role::firstOrCreate(['name' => 'Manager']);
-        $manager->syncPermissions([
-            'view user',
-            'view tour',
-            'create tour',
-            'edit tour',
-            'delete tour',
-            'publish/unpublish packages',
-            'view bookings',
-            'confirm bookings',
-            'view vehicles',
-            'add vehicle',
-            'assign vehicle to tour',
-            'view guides/drivers',
-            'assign guide/driver to tour',
-            'update guide/driver availability',
-            'view payments',
-            'view reports',
-        ]);
-
-        // Role: Driver
-        $driver = Role::firstOrCreate(['name' => 'Driver']);
-        $driver->syncPermissions([
-            'view vehicles',
-            'view tour',
-            'view bookings',
-        ]);
-
-        // Role: Customer Support
-        $support = Role::firstOrCreate(['name' => 'Customer Support']);
-        $support->syncPermissions([
-            'view user',
-            'view bookings',
-            'edit bookings',
-            'cancel bookings',
-            'view inquiries',
-            'reply inquiries',
-        ]);
-
-        // Role: Accountant
-        $accountant = Role::firstOrCreate(['name' => 'Accountant']);
-        $accountant->syncPermissions([
-            'view payments',
-            'confirm payments',
-            'issue refunds',
-            'generate invoice',
-            'view reports',
-        ]);
     }
 }

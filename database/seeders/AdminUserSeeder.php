@@ -2,11 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\User; // Adjust this if your User model is in a different namespace
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
+
+// Adjust this if your User model is in a different namespace
 
 class AdminUserSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class AdminUserSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => 'Admin']);
 
         // Give the Admin role all permissions
-        $adminRole->syncPermissions(Permission::all());
+//        $adminRole->syncPermissions(Permission::all());
 
         // Create admin user
         $admin = User::firstOrCreate(
@@ -24,10 +25,12 @@ class AdminUserSeeder extends Seeder
             [
                 'name' => 'Admin User',
                 'password' => Hash::make('password'), // Change for production
+                'email_verified_at' => now(),
+                'role_id' => $adminRole->id,
             ]
         );
 
         // Assign role to the user
-        $admin->assignRole($adminRole);
+        // $admin->assignRole($adminRole);
     }
 }
