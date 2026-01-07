@@ -2,25 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTripTypeRequest;
 use App\Models\TripType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class TripTypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        $tData['triptype'] = null;
-        if ($request->has('edit')) {
-            $tData['triptype'] = TripType::find($request->edit);
-        }
-        $tData['triptypes'] = TripType::all();
+        $data['tripTypes'] = TripType::all();
 
-        $tData['title'] = "Trip Types";
-        return view('masters.trip_types', $tData);
+        return $this->extendedView('trip.type.index', $data, 'trip types');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreTripTypeRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+
+            TripType::create($validated);
+
+            return redirect()
+                ->route('triptypes.index')
+                ->with('success', 'Trip type created successfully.');
+        } catch (Throwable $e) {
+            Log::error('Error creating trip type: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return redirect()
+                ->route('triptypes.index')
+                ->with('error', 'An error occurred while creating the trip type.');
+        }
     }
 
     /**
@@ -29,30 +47,6 @@ class TripTypeController extends Controller
     public function create()
     {
         //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-        $exists = exists(TripType::class, $request->triptype);
-        if (!$exists) {
-            try {
-                $triptype = $request->triptype;
-                // $triptype['created_by'] = Auth::user()->id;
-
-                TripType::create($triptype);
-                return redirect()->route('triptypes.index')->with('success', 'Record added successfully!');
-            } catch (\Throwable $th) {
-                Log::error(message: $th->getMessage());
-
-                return redirect()->route('triptypes.index')->with('error', 'An error occurred while adding the car brand.');
-            }
-        }
-
-        return redirect()->route('triptypes.index')->with('error', 'Record already exists!');
     }
 
     /**
@@ -74,28 +68,48 @@ class TripTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(StoreTripTypeRequest $request, $id)
     {
-        //
-        $TripType = TripType::findOrFail($id);
-        
-        $validatedData = $request->validate([
-            'triptype.name' => 'required|string|max:255',
-        ]);
+        try {
+            $validated = $request->validated();
+            $tripType = TripType::findOrFail($id);
 
-        $triptype = $validatedData['triptype'];
-        // $triptype['modified_by'] = Auth::id();
+            $tripType->update($validated);
 
-        $TripType->update($triptype);
+            return redirect()
+                ->route('triptypes.index')
+                ->with('success', 'Trip type updated successfully!');
+        } catch (Throwable $e) {
+            Log::error('Error updating trip type: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
 
-        return redirect()->route('triptypes.index')->with('success', 'Record updated successfully!');
+            return redirect()
+                ->route('triptypes.index')
+                ->with('error', 'An error occurred while updating the trip type.');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TripType $tripType)
+    public function destroy($id)
     {
-        //
+        try {
+            $tripType = TripType::findOrFail($id);
+            $tripType->delete();
+
+            return redirect()
+                ->route('triptypes.index')
+                ->with('success', 'Trip type deleted successfully!');
+        } catch (Throwable $e) {
+            Log::error('Error deleting trip type: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return redirect()
+                ->route('triptypes.index')
+                ->with('error', 'An error occurred while deleting the trip type.');
+        }
     }
 }

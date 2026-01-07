@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DriverType extends Model
 {
-    //
-    protected $guarded = [];
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = ['name', 'status'];
 
     /**
      * Relationship: A DriverType has many Drivers.

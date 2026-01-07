@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Channel extends Model
 {
-    //
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'status',
+    ];
 }

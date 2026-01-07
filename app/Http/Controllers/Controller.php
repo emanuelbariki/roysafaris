@@ -13,7 +13,7 @@ abstract class Controller
         $sidebarMenu = $this->filterSidebarMenu($sidebarMenu);
 
         return view($view, array_merge($data, [
-            'title' => ucfirst($title),
+            'title' => ucwords($title),
             'gate' => Gate::class,
             'sidebarMenu' => $sidebarMenu,
         ]));
@@ -43,7 +43,7 @@ abstract class Controller
 
         foreach ($menu as $item) {
             // Check if user has access to this item
-            if (!$this->checkMenuPermission($item)) {
+            if (! $this->checkMenuPermission($item)) {
                 continue;
             }
 
@@ -68,7 +68,7 @@ abstract class Controller
      */
     protected function checkMenuPermission(array $item): bool
     {
-        if (!isset($item['permission'])) {
+        if (! isset($item['permission'])) {
             return true;
         }
 
@@ -82,6 +82,7 @@ abstract class Controller
                         return true;
                     }
                 }
+
                 return false;
             }
         }

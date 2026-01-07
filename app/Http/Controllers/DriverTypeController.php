@@ -2,100 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDriverTypeRequest;
 use App\Models\DriverType;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class DriverTypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index(): View
     {
-        //
-        
-        $tData['drivertype'] = null;
-        if ($request->has('edit')) {
-            $tData['drivertype'] = DriverType::find($request->edit);
-        }
-        $tData['drivertypes'] = DriverType::all();
-        $tData['title'] = "Driver Types";
-        return view('masters.driver_types', $tData);
+        $data['driverTypes'] = DriverType::query()->latest()->paginate(10);
+
+        return $this->extendedView('driver.types.index', $data, 'drivers types');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreDriverTypeRequest $request): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+
+        DriverType::create($validated);
+
+        return redirect()
+            ->route('drivertypes.index')
+            ->with('flash_success', 'Driver type created successfully.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function create(): View
     {
-        //
-        // Check if the brand already in db
-        $exists = exists(DriverType::class, $request->drivertype);
-        if (!$exists) {
-            try {
-                $drivertype = $request->drivertype;
-                DriverType::create($drivertype);
-                return redirect()->route('drivertypes.index')->with('success', 'Record added successfully!');
-            } catch (\Throwable $th) {
-                Log::error(message: $th->getMessage());
-                return redirect()->route('drivertypes.index')->with('error', 'An error occurred while adding the car brand.');
-            }
-        }
-
-        return redirect()->route('drivertypes.index')->with('error', 'Record already exists!');
+        return view('driver.types.create');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(DriverType $driverType)
+    public function show(DriverType $driverType): View
     {
-        //
+        return view('driver.types.show', compact('driverType'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DriverType $driverType)
+    public function edit(DriverType $driverType): View
     {
-        //
+        return view('driver.types.edit', compact('driverType'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function update(StoreDriverTypeRequest $request, $id): RedirectResponse
     {
-        //
-        //
-        $DriverTypes = DriverType::findOrFail($id);
-        
-        $validatedData = $request->validate([
-            'drivertype.name' => 'required|string|max:255',
-        ]);
+        $validated = $request->validated();
+        $driverType = DriverType::findOrFail($id);
 
-        $drivertype = $validatedData['drivertype'];
-        // $drivertype['modified_by'] = Auth::id();
+        $driverType->update($validated);
 
-        $DriverTypes->update($drivertype);
-
-        return redirect()->route('drivertypes.index')->with('success', 'Record updated successfully!');
+        return redirect()
+            ->route('drivertypes.index')
+            ->with('flash_success', 'Driver type updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(DriverType $driverType)
+    public function destroy($type): RedirectResponse
     {
-        //
+        $driverType = DriverType::findOrFail($type);
+        $driverType->delete();
+
+        return redirect()
+            ->route('drivertypes.index')
+            ->with('flash_success', 'Driver type deleted successfully.');
     }
 }

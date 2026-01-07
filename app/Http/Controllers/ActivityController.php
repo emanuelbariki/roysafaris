@@ -2,59 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreActivityRequest;
 use App\Models\Activity;
-use Illuminate\Http\Request;
-use App\Http\Requests\ActivityRequest;
 
 class ActivityController extends Controller
 {
     public function index()
     {
-        $activities = Activity::all();
-        $title = "Activities Module";
-        return view('activities.index', compact('activities', 'title'));
+        $data['activities'] = Activity::all();
+
+        return $this->extendedView('activities.index', $data, 'activities module');
+    }
+
+    public function store(StoreActivityRequest $request)
+    {
+        $validated = $request->validated();
+        Activity::query()->create($validated);
+
+        return back()->with('flash_success', 'Activity created successfully.');
     }
 
     public function create()
     {
-        // Passing an empty variable for create
-        return view('activities.form',[
-            'title' => 'Create Activities',
-        ]);
-    }
-
-    public function store(ActivityRequest $request)
-    {
-        // Validated data from the request
-        $validated = $request->validated();
-        // Create the activity
-        Activity::create($validated);
-
-        return redirect()->route('activities.index')->with('success', 'Activity created successfully.');
+        return back()->with('flash_error', 'Not found');
     }
 
     public function edit(Activity $activity)
     {
-        // Pass the existing activity to the form view for editing
-        $title = "Edit Activity";
-        return view('activities.form', compact('activity', 'title'));
+        return back()->with('flash_error', 'Not found');
     }
 
-    public function update(ActivityRequest $request, Activity $activity)
+    public function update(StoreActivityRequest $request, Activity $activity)
     {
-        // Validated data from the request
         $validated = $request->validated();
-
-        // Update the activity
         $activity->update($validated);
 
-        return redirect()->route('activities.index')->with('success', 'Activity updated successfully.');
+        return back()->with('flash_success', 'Activity updated successfully.');
     }
 
     public function destroy(Activity $activity)
     {
         $activity->delete();
 
-        return redirect()->route('activities.index')->with('success', 'Activity deleted successfully.');
+        return back()->with('flash_success', 'Activity deleted successfully.');
     }
 }

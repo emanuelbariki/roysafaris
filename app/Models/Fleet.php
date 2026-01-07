@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Fleet extends Model
 {
-    //
-    protected $guarded = [];
+    use HasFactory;
 
+    protected $guarded = [];
 
     /**
      * Relationship with FleetType.

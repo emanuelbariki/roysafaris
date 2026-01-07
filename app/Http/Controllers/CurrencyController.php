@@ -2,94 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCurrencyRequest;
 use App\Models\Currency;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class CurrencyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {        
-        $tData['currency'] = null;
-        if ($request->has('edit')) {
-            $tData['currency']     = Currency::find($request->edit);
-        }
+    public function index()
+    {
+        $data['currencies'] = Currency::all();
 
-        $tData['currencies']        = Currency::all();
-        $tData['title']          = "Currencies";
-        return view('masters.currencies', $tData);
+        return $this->extendedView('currencies.index', $data, 'currencies');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function store(StoreCurrencyRequest $request)
+    {
+        $validated = $request->validated();
+
+        Currency::create($validated);
+
+        return back()->with('flash_success', 'Currency created successfully.');
+    }
+
     public function create()
     {
-        //
+        return back()->with('flash_error', 'Not found');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-
-        $currency = $request->currency;
-        $exists = exists(Currency::class, $currency);
-        if (!$exists) {
-            try {
-                $currency = $request->currency;
-                // dd($currency);
-                Currency::create($currency);
-                return redirect()->route('currencies.index')->with('success', 'Record added successfully!');
-            } catch (\Throwable $th) {
-                Log::error(message: $th->getMessage());
-                return redirect()->route('currencies.index')->with('error', 'An error occurred while adding the car brand.');
-            }
-        }
-
-        return redirect()->route('currencies.index')->with('error', 'Record already exists!');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Currency $currency)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Currency $currency)
     {
-        //
+        return back()->with('flash_error', 'Not found');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function update(StoreCurrencyRequest $request, Currency $currency)
     {
-        $Currencies = Currency::findOrFail($id);
-        $validatedData = $request->validate([
-            'currency.name' => 'required|string|max:255',
-        ]);
-        $currency = $validatedData['currency'];
-        $Currencies->update($currency);
-        return redirect()->route('currencies.index')->with('success', 'Record updated successfully!');
+        $validated = $request->validated();
+        $currency->update($validated);
+
+        return back()->with('flash_success', 'Currency updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Currency $currency)
     {
-        //
-    }
+        $currency->delete();
 
+        return back()->with('flash_success', 'Currency deleted successfully.');
+    }
 }

@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EnquiryRequest;
 use App\Models\Channel;
-use App\Models\Enquiry;
 use App\Models\Country;
+use App\Models\Enquiry;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,50 +14,50 @@ class EnquiryController extends Controller
 {
     public function index()
     {
-        $enquiries = Enquiry::all();
-        $title = 'Enquiries';
+        $data['enquiries'] = Enquiry::all();
 
-        return view('enquiries.index', compact('enquiries', 'title'));
+        return $this->extendedView('enquiry.index', $data, 'enquiries');
     }
 
-    public function create()
-    {
-        $countries = Country::all();
-        $users = User::all();
-        $title = "Create Enquiry";
-        $channels = Channel::all();
-
-        return view('enquiries.create',compact('countries','title', 'users','channels'));
-
-    }
     public function edit(Enquiry $enquiry)
     {
-        $countries = Country::all();
-        $users = User::all();
-        $title = "Create Enquiry";
-        return view('enquiries.edit', compact('enquiry','countries','title'));
-    }
+        $data['countries'] = Country::all();
+        $data['users'] = User::all();
+        $data['enquiry'] = $enquiry;
+        $data['channels'] = Channel::all();
 
+        return $this->extendedView('enquiry.edit', $data, 'Edit enquiry');
+    }
 
     public function destroy(Enquiry $enquiry)
     {
         $enquiry->delete();
-        return redirect()->route('enquiries.index')->with('success', 'Enquiry deleted successfully!');
+
+        return back()->with('flash_success', 'Enquiry deleted successfully.');
     }
+
     public function store(EnquiryRequest $request)
     {
-        // $data = $request->validated(); // Commented for noe
         $data = $request->all();
-        // dd($data);
         $data['draft'] = $request->has('save_draft');
         $data['user_id'] = Auth::user()->id;
-        Enquiry::create($data);
+        Enquiry::query()->create($data);
 
-        return redirect()->route('enquiries.index')->with('success', 'Enquiry saved successfully!');
+        return redirect()->route('enquiries.index')->with('flash_success', 'Enquiry saved successfully.');
+    }
+
+    public function create()
+    {
+        $data['countries'] = Country::all();
+        $data['users'] = User::all();
+        $data['channels'] = Channel::all();
+
+        return $this->extendedView('enquiry.create', $data, 'Create Enquiry');
     }
 
     public function update(Request $request, Enquiry $enquiry)
     {
+        logger($request->all());
         $data = $request->all();
 
         if ($request->has('update_owner')) {
@@ -65,6 +66,6 @@ class EnquiryController extends Controller
 
         $enquiry->update($data);
 
-        return redirect()->route('enquiries.index')->with('success', 'Enquiry updated successfully!');
+        return redirect()->route('enquiries.index')->with('flash_success', 'Enquiry updated successfully.');
     }
 }

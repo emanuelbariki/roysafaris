@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreServiceItemRequest;
 use App\Models\ServiceItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ServiceItemController extends Controller
 {
@@ -13,15 +15,35 @@ class ServiceItemController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        $tData['serviceitem'] = null;
-        if ($request->has('edit')) {
-            $tData['serviceitem'] = ServiceItem::find($request->edit);
-        }
-        $tData['serviceitems'] = ServiceItem::all();
+        $data['serviceItems'] = ServiceItem::all();
 
-        $tData['title'] = "Service Items";
-        return view('masters.service_items', $tData);
+        $tData['title'] = 'Service Items';
+
+        return $this->extendedView('service.items.index', $data, 'service items');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreServiceItemRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+
+            ServiceItem::create($validated);
+
+            return redirect()
+                ->route('serviceitems.index')
+                ->with('success', 'Service item created successfully!');
+        } catch (Throwable $e) {
+            Log::error('Error creating service item: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return redirect()
+                ->route('serviceitems.index')
+                ->with('error', 'An error occurred while creating the service item.');
+        }
     }
 
     /**
@@ -30,30 +52,6 @@ class ServiceItemController extends Controller
     public function create()
     {
         //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        // Check if the brand already in db
-        $exists = exists(ServiceItem::class, $request->serviceitem);
-        if (!$exists) {
-            try {
-                $serviceitem = $request->serviceitem;
-                // $serviceitem['created_by'] = Auth::user()->id;
-
-                ServiceItem::create($serviceitem);
-                return redirect()->route('serviceitems.index')->with('success', 'Record added successfully!');
-            } catch (\Throwable $th) {
-                Log::error(message: $th->getMessage());
-
-                return redirect()->route('serviceitems.index')->with('error', 'An error occurred while adding the car brand.');
-            } 
-        }
-
-        return redirect()->route('serviceitems.index')->with('error', 'Record already exists!');
     }
 
     /**
@@ -75,28 +73,48 @@ class ServiceItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(StoreServiceItemRequest $request, $id)
     {
-        //
-        $ServiceItem = ServiceItem::findOrFail($id);
-        
-        $validatedData = $request->validate([
-            'serviceitem.name' => 'required|string|max:255',
-        ]);
+        try {
+            $validated = $request->validated();
+            $serviceItem = ServiceItem::findOrFail($id);
 
-        $serviceitem = $validatedData['serviceitem'];
-        // $serviceitem['modified_by'] = Auth::id();
+            $serviceItem->update($validated);
 
-        $ServiceItem->update($serviceitem);
+            return redirect()
+                ->route('serviceitems.index')
+                ->with('success', 'Service item updated successfully!');
+        } catch (Throwable $e) {
+            Log::error('Error updating service item: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
 
-        return redirect()->route('serviceitems.index')->with('success', 'Record updated successfully!');
+            return redirect()
+                ->route('serviceitems.index')
+                ->with('error', 'An error occurred while updating the service item.');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ServiceItem $serviceItem)
+    public function destroy($id)
     {
-        //
+        try {
+            $serviceItem = ServiceItem::findOrFail($id);
+            $serviceItem->delete();
+
+            return redirect()
+                ->route('serviceitems.index')
+                ->with('success', 'service item deleted successfully!');
+        } catch (Throwable $e) {
+            Log::error('Error deleting service item: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return redirect()
+                ->route('serviceitems.index')
+                ->with('error', 'An error occurred while deleting the service item.');
+        }
     }
 }

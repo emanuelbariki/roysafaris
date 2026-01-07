@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -19,8 +23,8 @@ class UserController extends Controller
             title: 'Users'
         );
 
-//        $users = User::with('roles')->get();
-//        return view('users.index', compact('users', 'title'));
+        //        $users = User::with('roles')->get();
+        //        return view('users.index', compact('users', 'title'));
     }
 
     public function store(StoreUserRequest $request)
@@ -40,7 +44,8 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        $title = "Create Users";
+        $title = 'Create Users';
+
         return view('users.create', compact('roles', 'title'));
     }
 
@@ -53,28 +58,71 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $roles = Role::all();
-        $title = "Edit Users";
+        $title = 'Edit Users';
 
         return view('users.edit', compact('user', 'roles', 'title'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $request->validate([
-            'roles' => 'nullable|array',
-        ]);
+        try {
+            DB::beginTransaction();
 
-        $user = User::findOrFail($id);
-        $user->syncRoles($request->roles);
+            $updateData = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'role_id' => $request->role,
+            ];
 
-        return redirect()->route('users.index')->with('success', 'Roles updated!');
+            // Only update password if provided
+            if ($request->filled('password')) {
+                $updateData['password'] = bcrypt($request->password);
+            }
+
+            $user->update($updateData);
+
+            DB::commit();
+
+            return redirect()
+                ->route('users.index')
+                ->with('flash_success', 'User updated successfully');
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            Log::error('Error updating user: '.$e->getMessage(), [
+                'user_id' => $user->id,
+                'request_data' => $request->all(),
+                'exception' => $e,
+            ]);
+
+            return back()
+                ->withInput()
+                ->with('flash_error', 'Unable to update user at this time. Please try again.');
+        }
     }
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully!');
+            $user->delete();
+
+            DB::commit();
+
+            return redirect()
+                ->route('users.index')
+                ->with('flash_success', 'User deleted successfully');
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            Log::error('Error deleting user: '.$e->getMessage(), [
+                'user_id' => $user->id,
+                'exception' => $e,
+            ]);
+
+            return back()
+                ->with('flash_error', 'Unable to delete user at this time. Please try again.');
+        }
     }
 }

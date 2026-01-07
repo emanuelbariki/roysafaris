@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Currency extends Model
 {
-    //
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'code',
+        'base',
+        'rate',
+        'status',
+    ];
 }

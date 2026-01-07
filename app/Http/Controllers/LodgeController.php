@@ -2,63 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreLodgeRequest;
 use App\Models\Lodge;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class LodgeController extends Controller
 {
-    public function index() {
-        $lodges = Lodge::latest()->paginate(10);
-        $title = 'Lodges';
-        
-        return view('lodges.index', compact('lodges', 'title'));
+    public function index(): View
+    {
+        $data['lodges'] = Lodge::query()->latest()->paginate(10);
+
+        return $this->extendedView('lodges.index', $data, 'lodges');
     }
 
-    public function create() {
-        $title = 'Create Lodge';
-        return view('lodges.create', compact('title'));
+    public function store(StoreLodgeRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        Lodge::create($validated);
+
+        return redirect()
+            ->route('lodges.index')
+            ->with('success', 'Lodge created successfully.');
     }
 
-    public function store(Request $request) {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email',
-            'description' => 'nullable|string',
-        ]);
-
-        Lodge::create($request->all());
-
-        return redirect()->route('lodges.index')->with('success', 'Lodge created successfully.');
+    public function create(): View
+    {
+        return view('lodges.create');
     }
 
-    public function show(Lodge $lodge) {
-        $title = 'Lodge Details';
-        return view('lodges.show', compact('lodge', 'title'));
+    public function show(Lodge $lodge): View
+    {
+        return view('lodges.show', compact('lodge'));
     }
 
-    public function edit(Lodge $lodge) {
-        $title = 'Edit Lodge';
-        return view('lodges.edit', compact('lodge', 'title'));
+    public function edit(Lodge $lodge): View
+    {
+        return view('lodges.edit', compact('lodge'));
     }
 
-    public function update(Request $request, Lodge $lodge) {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email',
-            'description' => 'nullable|string',
-        ]);
+    public function update(StoreLodgeRequest $request, Lodge $lodge): RedirectResponse
+    {
+        $validated = $request->validated();
 
-        $lodge->update($request->all());
+        $lodge->update($validated);
 
-        return redirect()->route('lodges.index')->with('success', 'Lodge updated successfully.');
+        return redirect()
+            ->route('lodges.index')
+            ->with('success', 'Lodge updated successfully.');
     }
 
-    public function destroy(Lodge $lodge) {
+    public function destroy(Lodge $lodge): RedirectResponse
+    {
         $lodge->delete();
-        return redirect()->route('lodges.index')->with('success', 'Lodge deleted successfully.');
+
+        return redirect()
+            ->route('lodges.index')
+            ->with('success', 'Lodge deleted successfully.');
     }
 }

@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             RoomSeeder::class,
             CountriesSeeder::class,
-            PickupDropoffPointSeeder::class
+            PickupDropoffPointSeeder::class,
+            FleetActivitySeeder::class,
         ]);
     }
 }
