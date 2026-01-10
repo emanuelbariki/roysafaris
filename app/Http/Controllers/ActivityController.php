@@ -4,18 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreActivityRequest;
 use App\Models\Activity;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ActivityController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of activities.
+     */
+    public function index(): View
     {
+        $this->authorize('view::activity');
         $data['activities'] = Activity::all();
 
         return $this->extendedView('activities.index', $data, 'activities module');
     }
 
-    public function store(StoreActivityRequest $request)
+    /**
+     * Store a newly created activity in storage.
+     */
+    public function store(StoreActivityRequest $request): RedirectResponse
     {
+        $this->authorize('create::activity');
         $validated = $request->validated();
         Activity::query()->create($validated);
 
@@ -32,16 +42,24 @@ class ActivityController extends Controller
         return back()->with('flash_error', 'Not found');
     }
 
-    public function update(StoreActivityRequest $request, Activity $activity)
+    /**
+     * Update the specified activity in storage.
+     */
+    public function update(StoreActivityRequest $request, Activity $activity): RedirectResponse
     {
+        $this->authorize('edit::activity');
         $validated = $request->validated();
         $activity->update($validated);
 
         return back()->with('flash_success', 'Activity updated successfully.');
     }
 
-    public function destroy(Activity $activity)
+    /**
+     * Remove the specified activity from storage.
+     */
+    public function destroy(Activity $activity): RedirectResponse
     {
+        $this->authorize('delete::activity');
         $activity->delete();
 
         return back()->with('flash_success', 'Activity deleted successfully.');

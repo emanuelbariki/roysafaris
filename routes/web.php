@@ -12,9 +12,12 @@ use App\Http\Controllers\DriverTypeController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\FleetController;
 use App\Http\Controllers\LodgeController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceItemController;
 use App\Http\Controllers\ServiceProviderController;
+use App\Http\Controllers\SystemModuleController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\TripTypeController;
 use App\Http\Controllers\UserController;
@@ -108,9 +111,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('agents', AgentController::class);
     Route::resource('users', UserController::class);
 
-    Route::get('/roles', [AccessController::class, 'roles'])->name('roles.index');
+    // Permission and Role Management
+    Route::resource('permissions', PermissionController::class);
+    Route::resource('roles', RoleController::class);
 
-    Route::get('/permissions', [AccessController::class, 'permissions'])->name('permissions.index');
+    // System Modules Management
+    Route::resource('system-modules', SystemModuleController::class)->except(['create', 'edit']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

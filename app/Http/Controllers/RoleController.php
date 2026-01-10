@@ -2,75 +2,115 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-
+use App\Models\Role;
+use App\Models\Permission;
+use App\Models\SystemModule;
+use App\Http\Requests\StoreRoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class RoleController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of roles.
+     */
+    public function index(): View
     {
-        $roles = Role::all();
-        $title = "Roles";
-        return view('roles.index', compact('roles', 'title'));
+        $roles = Role::with('permissions')
+            ->withCount('permissions')
+            ->orderBy('name')
+            ->get();
+
+        return $this->extendedView('roles.index', compact('roles'), 'roles');
     }
 
-    public function create()
+    /**
+     * Show the form for creating a new role.
+     */
+    public function create(): View
     {
-        $title = "Create Roles";
-        $permissions = Permission::all();
-        return view('roles.create', compact('permissions','title'));
+        $modules = SystemModule::with('permissions')
+            ->orderBy('slug')
+            ->get();
+
+        return $this->extendedView('roles.create', compact('modules'), 'create role');
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created role in storage.
+     */
+    public function store(StoreRoleRequest $request): RedirectResponse
     {
-        $request->validate(['name' => 'required|unique:roles,name']);
+        $role = Role::create([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
 
-        $role = Role::create(['name' => $request->name]);
-        $role->syncPermissions($request->permissions);
-
-        return redirect()->route('roles.index')->with('success', 'Role created.');
-    }
-
-    public function assignPermission($id, Request $request)
-    {
-        $this->validate($request, ['permissions' => 'required|array']);
-        $role = Role::findOrFail($id);
-        $permissions = Permission::whereIn('name', $request->permissions)->get();
-
-        $role->syncPermissions($permissions);
-
-        return redirect()->route('roles.index')->with('success', 'Permissions updated!');
-    }
-
-    public function edit(Role $role)
-    {
-        $permissions = Permission::all();
-        $title = "Edit Roles";
-        return view('roles.edit', compact('role', 'permissions', 'title'));
-    }
-
-    public function update(Request $request, Role $role)
-    {
-        $role->update(['name' => $request->name]);
-        $role->syncPermissions($request->permissions);
-
-        return redirect()->route('roles.index')->with('success', 'Role updated.');
-    }
-
-    public function destroy(Role $role)
-        {
-            // Check if the role is assigned to any user
-            if ($role->users()->count() > 0) {
-                return redirect()->route('roles.index')
-                                ->with('error', 'Cannot delete role as it is assigned to one or more users.');
-            }
-
-            // Proceed with the role deletion if not assigned
-            $role->delete();
-
-            return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
+        // Sync permissions
+        if ($request->has('permissions')) {
+            $role->syncPermissions($request->permissions);
         }
 
+        return redirect()
+            ->route('roles.index')
+            ->with('success', 'Role created successfully.');
+    }
+
+    /**
+     * Show the form for editing the specified role.
+     */
+    public function edit(Role $role): View
+    {
+        $modules = SystemModule::with('permissions')
+            ->orderBy('slug')
+            ->get();
+
+        // Get role's permission IDs for easy checking in view
+        $rolePermissionIds = $role->permissions->pluck('id')->toArray();
+
+        return $this->extendedView('roles.edit', compact('role', 'modules', 'rolePermissionIds'), 'edit role');
+    }
+
+    /**
+     * Update the specified role in storage.
+     */
+    public function update(UpdateRoleRequest $request, Role $role): RedirectResponse
+    {
+        $role->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        // Sync permissions
+        if ($request->has('permissions')) {
+            $role->syncPermissions($request->permissions);
+        } else {
+            // If no permissions selected, detach all
+            $role->detachPermissions();
+        }
+
+        return redirect()
+            ->route('roles.index')
+            ->with('success', 'Role updated successfully.');
+    }
+
+    /**
+     * Remove the specified role from storage.
+     */
+    public function destroy(Role $role): RedirectResponse
+    {
+        // Check if the role is assigned to any user
+        if ($role->users()->count() > 0) {
+            return redirect()
+                ->route('roles.index')
+                ->with('error', 'Cannot delete role as it is assigned to one or more users.');
+        }
+
+        $role->delete();
+
+        return redirect()
+            ->route('roles.index')
+            ->with('success', 'Role deleted successfully.');
+    }
 }

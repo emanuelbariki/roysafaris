@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreServiceItemRequest;
 use App\Models\ServiceItem;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Throwable;
 
 class ServiceItemController extends Controller
@@ -13,8 +15,9 @@ class ServiceItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
+        $this->authorize('view::service_item');
         $data['serviceItems'] = ServiceItem::all();
 
         $tData['title'] = 'Service Items';
@@ -25,8 +28,9 @@ class ServiceItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreServiceItemRequest $request)
+    public function store(StoreServiceItemRequest $request): RedirectResponse
     {
+        $this->authorize('create::service_item');
         try {
             $validated = $request->validated();
 
@@ -73,8 +77,9 @@ class ServiceItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreServiceItemRequest $request, $id)
+    public function update(StoreServiceItemRequest $request, $id): RedirectResponse
     {
+        $this->authorize('edit::service_item');
         try {
             $validated = $request->validated();
             $serviceItem = ServiceItem::findOrFail($id);
@@ -98,8 +103,9 @@ class ServiceItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
+        $this->authorize('delete::service_item');
         try {
             $serviceItem = ServiceItem::findOrFail($id);
             $serviceItem->delete();

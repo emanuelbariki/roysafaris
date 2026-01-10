@@ -1,14 +1,16 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                data-target="#createChannelModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Channel
-        </button>
-    </div>
-@endpush
+@can('create::channel')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                    data-target="#createChannelModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Channel
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
@@ -38,26 +40,32 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button type="button"
-                                            class="btn btn-primary btn-icon-square-sm edit-channel-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-name="{{ $item->name }}"
-                                            data-status="{{ $item->status }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
+                                    @canany(['edit::channel', 'delete::channel'])
+                                        @can('edit::channel')
+                                            <button type="button"
+                                                    class="btn btn-primary btn-icon-square-sm edit-channel-btn"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->name }}"
+                                                    data-status="{{ $item->status }}"
+                                                    title="Edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        @endcan
 
-                                    <form action="{{ route('channels.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this channel?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::channel')
+                                            <form action="{{ route('channels.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this channel?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

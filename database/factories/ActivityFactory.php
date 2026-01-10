@@ -27,9 +27,9 @@ class ActivityFactory extends Factory
             'Photography Tour',
         ];
 
-        $name = fake()->unique()->randomElement($activities);
+        $name = fake()->randomElement($activities);
         $startDate = fake()->dateTimeBetween('now', '+6 months');
-        $endDate = fake()->dateTimeBetween($startDate, '+1 week');
+        $endDate = (clone $startDate)->modify('+'.fake()->numberBetween(1, 7).' days');
 
         return [
             'activity_code' => fake()->unique()->numerify('ACT-####'),

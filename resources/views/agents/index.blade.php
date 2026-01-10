@@ -1,21 +1,23 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                data-target="#createAgentModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Agent
-        </button>
-    </div>
-@endpush
+@can('create::agent')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                    data-target="#createAgentModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Agent
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <table id="datatable" class="table table-bordered dt-responsive nowrap"
+                    <table id="datatable" class="table table-bordered table-striped dt-responsive table-hover nowrap"
                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
@@ -36,27 +38,33 @@
                                 <td>{{ $item->phone ?? '-' }}</td>
                                 <td>{{ $item->address ?? '-' }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-icon-square-sm edit-agent-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-name="{{ $item->name }}"
-                                            data-email="{{ $item->email }}"
-                                            data-phone="{{ $item->phone ?? '' }}"
-                                            data-address="{{ $item->address ?? '' }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
+                                    @canany(['edit::agent', 'delete::agent'])
+                                        @can('edit::agent')
+                                            <button type="button" class="btn btn-primary btn-icon-square-sm edit-agent-btn"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->name }}"
+                                                    data-email="{{ $item->email }}"
+                                                    data-phone="{{ $item->phone ?? '' }}"
+                                                    data-address="{{ $item->address ?? '' }}"
+                                                    title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        @endcan
 
-                                    <form action="{{ route('agents.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this agent?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::agent')
+                                            <form action="{{ route('agents.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this agent?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

@@ -1,75 +1,99 @@
+@php use Carbon\Carbon; @endphp
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                data-target="#createActivityModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Activity
-        </button>
-    </div>
-@endpush
+@can('create::activity')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                    data-target="#createActivityModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Activity
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <table id="datatable" class="table table-bordered dt-responsive nowrap"
-                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Location</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($activities as $item)
+                    <div class="table-responsive">
+                        <table id="datatable" class="table table-bordered dt-responsive nowrap"
+                               style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->description }}</td>
-                                <td>{{ $item->price }}</td>
-                                <td>{{ $item->location }}</td>
-                                <td>{{ $item->start_date }}</td>
-                                <td>{{ $item->end_date }}</td>
-                                <td>
-                                    <button type="button"
-                                            class="btn btn-primary btn-icon-square-sm edit-activity-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-activity_code="{{ $item->activity_code }}"
-                                            data-name="{{ $item->name }}"
-                                            data-description="{{ $item->description }}"
-                                            data-price="{{ $item->price }}"
-                                            data-location="{{ $item->location }}"
-                                            data-start_date="{{ $item->start_date }}"
-                                            data-end_date="{{ $item->end_date }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-
-                                    <form action="{{ route('activities.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this activity?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </td>
+                                <th width="5%">S/N</th>
+                                <th width="15%">Name</th>
+                                <th width="25%">Description</th>
+                                <th width="10%">Price</th>
+                                <th width="15%">Location</th>
+                                <th width="10%">Start Date</th>
+                                <th width="10%">End Date</th>
+                                <th width="10%" class="text-center">Actions</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach($activities as $item)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td class="text-truncate" style="max-width: 150px;">{{ $item->name }}</td>
+                                    <td class="text-truncate" style="max-width: 250px;"
+                                        title="{{ $item->description }}">
+                                        {{ \Illuminate\Support\Str::limit($item->description, 100) }}
+                                        @if(strlen($item->description) > 100)
+                                            <span class="text-muted">...</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ number_format($item->price, 2) }}</td>
+                                    <td class="text-truncate" style="max-width: 150px;" title="{{ $item->location }}">
+                                        {{ \Illuminate\Support\Str::limit($item->location, 30) }}
+                                        @if(strlen($item->location) > 30)
+                                            <span class="text-muted">...</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ Carbon::parse($item->start_date)->format('M d, Y') }}</td>
+                                    <td>{{ Carbon::parse($item->end_date)->format('M d, Y') }}</td>
+                                    <td class="text-center">
+                                        @canany(['edit::activity', 'delete::activity'])
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                @can('edit::activity')
+                                                    <button type="button"
+                                                            class="btn btn-primary btn-icon-square-sm edit-activity-btn"
+                                                            data-id="{{ $item->id }}"
+                                                            data-activity_code="{{ $item->activity_code }}"
+                                                            data-name="{{ $item->name }}"
+                                                            data-description="{{ $item->description }}"
+                                                            data-price="{{ $item->price }}"
+                                                            data-location="{{ $item->location }}"
+                                                            data-start_date="{{ $item->start_date }}"
+                                                            data-end_date="{{ $item->end_date }}"
+                                                            title="Edit">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                @endcan
+
+                                                @can('delete::activity')
+                                                    <form action="{{ route('activities.destroy', $item->id) }}" method="POST"
+                                                          style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                                class="btn btn-danger btn-icon-square-sm ml-1"
+                                                                onclick="return confirm('Are you sure you want to delete this activity?')"
+                                                                title="Delete">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            </div>
+                                        @endcanany
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

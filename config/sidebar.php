@@ -71,7 +71,7 @@ return [
         'icon' => 'navigation',
         'permission' => null,
         'permission_type' => null, // Use @canany directive
-        'active_routes' => ['roles.*'],
+        'active_routes' => ['fleets.*', 'fleettypes.*', 'fleetclasses.*'],
         'is_dropdown' => true,
         'children' => [
             [
@@ -197,9 +197,9 @@ return [
     [
         'name' => 'User management',
         'icon' => 'users',
-        'permission' => ['user::manage', 'role::manage', 'permission::manage'],
-        'permission_type' => 'canany', // Use @canany directive
-        'active_routes' => ['users.*'],
+        'permission' => ['view::user', 'view::role', 'view::permission', 'view::module'],
+        'permission_type' => 'canany',
+        'active_routes' => ['users.*', 'roles.*', 'permissions.*', 'system-modules.*'],
         'is_dropdown' => true,
         'children' => [
             [
@@ -219,12 +219,20 @@ return [
                 'active_routes' => ['roles.*'],
             ],
             [
-                'name' => 'Permission',
+                'name' => 'Permissions',
                 'route' => 'permissions.index',
                 'icon' => 'ti-control-record',
                 'permission' => 'permission::manage',
                 'permission_type' => 'can',
-                'active_routes' => ['permissions.*'],
+                'active_routes' => ['permissions.index', 'permissions.store', 'permissions.update', 'permissions.destroy'],
+            ],
+            [
+                'name' => 'System Modules',
+                'route' => 'system-modules.index',
+                'icon' => 'ti-control-record',
+                'permission' => 'view::module',
+                'permission_type' => 'can',
+                'active_routes' => ['system-modules.index', 'system-modules.store', 'system-modules.update', 'system-modules.destroy'],
             ],
         ],
     ],

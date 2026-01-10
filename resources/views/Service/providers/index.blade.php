@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createServiceProviderModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Service Provider
-        </button>
-    </div>
-@endpush
+@can('create::service_provider')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createServiceProviderModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Service Provider
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
@@ -43,34 +45,40 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button type="button"
-                                            class="btn btn-primary btn-icon-square-sm edit-service-provider-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-name="{{ $item->name }}"
-                                            data-type="{{ $item->type }}"
-                                            data-email="{{ $item->email ?? '' }}"
-                                            data-phone="{{ $item->phone ?? '' }}"
-                                            data-website="{{ $item->website ?? '' }}"
-                                            data-address="{{ $item->address ?? '' }}"
-                                            data-city_id="{{ $item->city_id ?? '' }}"
-                                            data-country_id="{{ $item->country_id ?? '' }}"
-                                            data-bill_to="{{ $item->bill_to ?? '' }}"
-                                            data-status="{{ $item->status }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
+                                    @canany(['edit::service_provider', 'delete::service_provider'])
+                                        @can('edit::service_provider')
+                                            <button type="button"
+                                                    class="btn btn-primary btn-icon-square-sm edit-service-provider-btn"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->name }}"
+                                                    data-type="{{ $item->type }}"
+                                                    data-email="{{ $item->email ?? '' }}"
+                                                    data-phone="{{ $item->phone ?? '' }}"
+                                                    data-website="{{ $item->website ?? '' }}"
+                                                    data-address="{{ $item->address ?? '' }}"
+                                                    data-city_id="{{ $item->city_id ?? '' }}"
+                                                    data-country_id="{{ $item->country_id ?? '' }}"
+                                                    data-bill_to="{{ $item->bill_to ?? '' }}"
+                                                    data-status="{{ $item->status }}"
+                                                    title="Edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        @endcan
 
-                                    <form action="{{ route('serviceproviders.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this service provider?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::service_provider')
+                                            <form action="{{ route('serviceproviders.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this service provider?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

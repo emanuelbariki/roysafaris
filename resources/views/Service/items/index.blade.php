@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createServiceItemModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Service Item
-        </button>
-    </div>
-@endpush
+@can('create::service_item')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createServiceItemModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Service Item
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
@@ -39,28 +41,33 @@
                                     @endif
                                 </td>
                                 <td>
+                                    @canany(['edit::service_item', 'delete::service_item'])
+                                        @can('edit::service_item')
+                                            <button type="button"
+                                                    class="btn btn-primary btn-icon-square-sm edit-service-item-btn"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->name }}"
+                                                    data-category="{{ $item->category }}"
+                                                    data-status="{{ $item->status }}"
+                                                    title="Edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        @endcan
 
-                                    <button type="button"
-                                            class="btn btn-primary btn-icon-square-sm edit-service-item-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-name="{{ $item->name }}"
-                                            data-category="{{ $item->category }}"
-                                            data-status="{{ $item->status }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-
-                                    <form action="{{ route('serviceitems.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this service item?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::service_item')
+                                            <form action="{{ route('serviceitems.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this service item?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

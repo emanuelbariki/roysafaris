@@ -6,14 +6,21 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Throwable;
 
 class UserController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of users.
+     */
+    public function index(): View
     {
+        $this->authorize('view::user');
+
         $data['users'] = User::query()->with('role')->get();
         $data['roles'] = Role::query()->select('id', 'name')->get();
 
@@ -27,8 +34,12 @@ class UserController extends Controller
         //        return view('users.index', compact('users', 'title'));
     }
 
-    public function store(StoreUserRequest $request)
+    /**
+     * Store a newly created user in storage.
+     */
+    public function store(StoreUserRequest $request): RedirectResponse
     {
+        $this->authorize('create::user');
         // Create the user with validated data
         $user = User::create([
             'name' => $request->name,
@@ -41,8 +52,13 @@ class UserController extends Controller
             ->with('success', 'User created successfully!');
     }
 
-    public function create()
+    /**
+     * Show the form for creating a new user.
+     */
+    public function create(): View
     {
+        $this->authorize('create::user');
+
         $roles = Role::all();
         $title = 'Create Users';
 
@@ -54,8 +70,12 @@ class UserController extends Controller
         //
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the specified user.
+     */
+    public function edit($id): View
     {
+        $this->authorize('edit::user');
         $user = User::findOrFail($id);
         $roles = Role::all();
         $title = 'Edit Users';
@@ -63,8 +83,12 @@ class UserController extends Controller
         return view('users.edit', compact('user', 'roles', 'title'));
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    /**
+     * Update the specified user in storage.
+     */
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
+        $this->authorize('edit::user');
         try {
             DB::beginTransaction();
 
@@ -101,8 +125,12 @@ class UserController extends Controller
         }
     }
 
-    public function destroy(User $user)
+    /**
+     * Remove the specified user from storage.
+     */
+    public function destroy(User $user): RedirectResponse
     {
+        $this->authorize('delete::user');
         try {
             DB::beginTransaction();
 

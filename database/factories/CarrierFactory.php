@@ -21,11 +21,11 @@ class CarrierFactory extends Factory
         return [
             'name' => fake()->company(),
             'carrier_type' => fake()->randomElement($carrierTypes),
-            'email' => fake()->optional()->companyEmail(),
-            'phone' => fake()->optional()->phoneNumber(),
-            'website' => fake()->optional()->url(),
-            'city_id' => fake()->optional()->numberBetween(1, 50),
-            'country_id' => fake()->optional()->numberBetween(1, 50),
+            'email' => fake()->companyEmail(),
+            'phone' => fake()->phoneNumber(),
+            'website' => fake()->url(),
+            'city_id' => fake()->numberBetween(1, 50),
+            'country_id' => fake()->numberBetween(1, 50),
             'voucher_copies' => 3,
             'stauts' => fake()->randomElement(['active', 'inactive']),
         ];

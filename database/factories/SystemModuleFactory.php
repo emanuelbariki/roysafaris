@@ -12,7 +12,7 @@ class SystemModuleFactory extends Factory
     public function definition(): array
     {
         return [
-
+            'slug' => fake()->unique()->slug(2),
         ];
     }
 }

@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <a href="{{ route('enquiries.create') }}" class="btn btn-primary btn-sm">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Enquiry
-        </a>
-    </div>
-@endpush
+@can('create::enquiry')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <a href="{{ route('enquiries.create') }}" class="btn btn-primary btn-sm">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Enquiry
+            </a>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
@@ -33,23 +35,29 @@
                                 <td>{{ $item->email }}</td>
                                 <td>{{ $item->phone }}</td>
                                 <td>
-                                    <a href="{{ route('enquiries.edit', $item->id) }}"
-                                       class="btn btn-primary btn-icon-square-sm"
-                                       title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </a>
+                                    @canany(['edit::enquiry', 'delete::enquiry'])
+                                        @can('edit::enquiry')
+                                            <a href="{{ route('enquiries.edit', $item->id) }}"
+                                               class="btn btn-primary btn-icon-square-sm"
+                                               title="Edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                        @endcan
 
-                                    <form action="{{ route('enquiries.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete enquiry?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::enquiry')
+                                            <form action="{{ route('enquiries.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete enquiry?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

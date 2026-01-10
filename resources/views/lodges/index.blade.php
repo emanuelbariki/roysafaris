@@ -1,14 +1,16 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                data-target="#createLodgeModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Lodge
-        </button>
-    </div>
-@endpush
+@can('create::lodge')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                    data-target="#createLodgeModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Lodge
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
@@ -36,28 +38,34 @@
                                 <td>{{ $item->phone ?? '-' }}</td>
                                 <td>{{ $item->email ?? '-' }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-icon-square-sm edit-lodge-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-name="{{ $item->name }}"
-                                            data-location="{{ $item->location ?? '' }}"
-                                            data-phone="{{ $item->phone ?? '' }}"
-                                            data-email="{{ $item->email ?? '' }}"
-                                            data-description="{{ $item->description ?? '' }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
+                                    @canany(['edit::lodge', 'delete::lodge'])
+                                        @can('edit::lodge')
+                                            <button type="button" class="btn btn-primary btn-icon-square-sm edit-lodge-btn"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->name }}"
+                                                    data-location="{{ $item->location ?? '' }}"
+                                                    data-phone="{{ $item->phone ?? '' }}"
+                                                    data-email="{{ $item->email ?? '' }}"
+                                                    data-description="{{ $item->description ?? '' }}"
+                                                    title="Edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        @endcan
 
-                                    <form action="{{ route('lodges.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this lodge?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::lodge')
+                                            <form action="{{ route('lodges.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this lodge?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

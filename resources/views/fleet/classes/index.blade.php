@@ -1,14 +1,16 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                data-target="#createFleetClassModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Fleet Class
-        </button>
-    </div>
-@endpush
+@can('create::fleet')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                    data-target="#createFleetClassModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Fleet Class
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
@@ -38,26 +40,32 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button type="button"
-                                            class="btn btn-primary btn-icon-square-sm edit-fleet-class-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-name="{{ $item->name }}"
-                                            data-status="{{ $item->status }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
+                                    @canany(['edit::fleet', 'delete::fleet'])
+                                        @can('edit::fleet')
+                                            <button type="button"
+                                                    class="btn btn-primary btn-icon-square-sm edit-fleet-class-btn"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->name }}"
+                                                    data-status="{{ $item->status }}"
+                                                    title="Edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        @endcan
 
-                                    <form action="{{ route('fleetclasses.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this fleet class?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::fleet')
+                                            <form action="{{ route('fleetclasses.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this fleet class?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

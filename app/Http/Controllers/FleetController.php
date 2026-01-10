@@ -11,15 +11,22 @@ use App\Http\Requests\UpdateFleetRequest;
 use App\Models\Fleet;
 use App\Models\FleetClass;
 use App\Models\FleetType;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Throwable;
 
 class FleetController extends Controller
 {
-    public function fleets()
+    /**
+     * Display a listing of fleets.
+     */
+    public function fleets(): View
     {
+        $this->authorize('view::fleet');
+
         try {
             $data['fleets'] = Fleet::query()
                 ->with('fleetType', 'fleetClass', 'drivers')->get();
@@ -39,8 +46,12 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetStore(StoreFleetRequest $request)
+    /**
+     * Store a newly created fleet in storage.
+     */
+    public function fleetStore(StoreFleetRequest $request): RedirectResponse
     {
+        $this->authorize('create::fleet');
         try {
             DB::beginTransaction();
 
@@ -75,8 +86,12 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetUpdate(UpdateFleetRequest $request, Fleet $fleet)
+    /**
+     * Update the specified fleet in storage.
+     */
+    public function fleetUpdate(UpdateFleetRequest $request, Fleet $fleet): RedirectResponse
     {
+        $this->authorize('edit::fleet');
         try {
             DB::beginTransaction();
 
@@ -112,8 +127,12 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetDestroy(Fleet $fleet)
+    /**
+     * Remove the specified fleet from storage.
+     */
+    public function fleetDestroy(Fleet $fleet): RedirectResponse
     {
+        $this->authorize('delete::fleet');
         try {
             DB::beginTransaction();
 
@@ -137,8 +156,12 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetTypes()
+    /**
+     * Display a listing of fleet types.
+     */
+    public function fleetTypes(): View
     {
+        $this->authorize('view::fleet');
         try {
             $data['fleetTypes'] = FleetType::query()->select('id', 'name', 'status')->get();
 
@@ -153,8 +176,13 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetTypesStore(StoreFleetTypeRequest $request)
+    /**
+     * Store a newly created fleet type in storage.
+     */
+    public function fleetTypesStore(StoreFleetTypeRequest $request): RedirectResponse
     {
+        $this->authorize('create::fleet');
+
         try {
             DB::beginTransaction();
 
@@ -182,8 +210,13 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetTypesUpdate(UpdateFleetTypeRequest $request, FleetType $type)
+    /**
+     * Update the specified fleet type in storage.
+     */
+    public function fleetTypesUpdate(UpdateFleetTypeRequest $request, FleetType $type): RedirectResponse
     {
+        $this->authorize('edit::fleet');
+
         try {
             DB::beginTransaction();
 
@@ -212,8 +245,13 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetTypesDestroy(FleetType $type)
+    /**
+     * Remove the specified fleet type from storage.
+     */
+    public function fleetTypesDestroy(FleetType $type): RedirectResponse
     {
+        $this->authorize('delete::fleet');
+
         try {
             DB::beginTransaction();
 
@@ -237,8 +275,13 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetClasses()
+    /**
+     * Display a listing of fleet classes.
+     */
+    public function fleetClasses(): View
     {
+        $this->authorize('view::fleet');
+
         try {
             $data['fleetClasses'] = FleetClass::query()->select('id', 'name', 'status')->get();
 
@@ -253,8 +296,13 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetClassesStore(StoreFleetClassRequest $request)
+    /**
+     * Store a newly created fleet class in storage.
+     */
+    public function fleetClassesStore(StoreFleetClassRequest $request): RedirectResponse
     {
+        $this->authorize('create::fleet');
+
         try {
             DB::beginTransaction();
 
@@ -282,8 +330,13 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetClassesUpdate(UpdateFleetClassRequest $request, FleetClass $classes)
+    /**
+     * Update the specified fleet class in storage.
+     */
+    public function fleetClassesUpdate(UpdateFleetClassRequest $request, FleetClass $classes): RedirectResponse
     {
+        $this->authorize('edit::fleet');
+
         try {
             DB::beginTransaction();
 
@@ -312,8 +365,13 @@ class FleetController extends Controller
         }
     }
 
-    public function fleetClassesDestroy(FleetClass $classes)
+    /**
+     * Remove the specified fleet class from storage.
+     */
+    public function fleetClassesDestroy(FleetClass $classes): RedirectResponse
     {
+        $this->authorize('delete::fleet');
+
         try {
             DB::beginTransaction();
 

@@ -1,14 +1,16 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                data-target="#createFleetModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Fleet
-        </button>
-    </div>
-@endpush
+@can('create::fleet')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                    data-target="#createFleetModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Fleet
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
@@ -46,31 +48,37 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-icon-square-sm edit-fleet-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-make_model="{{ $item->make_model }}"
-                                            data-reg_no="{{ $item->reg_no }}"
-                                            data-fleet_type_id="{{ $item->fleet_type_id }}"
-                                            data-fleet_class_id="{{ $item->fleet_class_id }}"
-                                            data-seats="{{ $item->seats }}"
-                                            data-purchase_date="{{ $item->purchase_date }}"
-                                            data-mileage="{{ $item->mileage }}"
-                                            data-status="{{ $item->status }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
+                                    @canany(['edit::fleet', 'delete::fleet'])
+                                        @can('edit::fleet')
+                                            <button type="button" class="btn btn-primary btn-icon-square-sm edit-fleet-btn"
+                                                    data-id="{{ $item->id }}"
+                                                    data-make_model="{{ $item->make_model }}"
+                                                    data-reg_no="{{ $item->reg_no }}"
+                                                    data-fleet_type_id="{{ $item->fleet_type_id }}"
+                                                    data-fleet_class_id="{{ $item->fleet_class_id }}"
+                                                    data-seats="{{ $item->seats }}"
+                                                    data-purchase_date="{{ $item->purchase_date }}"
+                                                    data-mileage="{{ $item->mileage }}"
+                                                    data-status="{{ $item->status }}"
+                                                    title="Edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        @endcan
 
-                                    <form action="{{ route('fleets.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this fleet?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::fleet')
+                                            <form action="{{ route('fleets.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this fleet?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

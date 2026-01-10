@@ -1,14 +1,16 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                data-target="#createCurrencyModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Currency
-        </button>
-    </div>
-@endpush
+@can('create::currency')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                    data-target="#createCurrencyModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Currency
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
@@ -44,28 +46,34 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-icon-square-sm edit-currency-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-name="{{ $item->name }}"
-                                            data-code="{{ $item->code }}"
-                                            data-base="{{ $item->base }}"
-                                            data-rate="{{ $item->rate }}"
-                                            data-status="{{ $item->status }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
+                                    @canany(['edit::currency', 'delete::currency'])
+                                        @can('edit::currency')
+                                            <button type="button" class="btn btn-primary btn-icon-square-sm edit-currency-btn"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->name }}"
+                                                    data-code="{{ $item->code }}"
+                                                    data-base="{{ $item->base }}"
+                                                    data-rate="{{ $item->rate }}"
+                                                    data-status="{{ $item->status }}"
+                                                    title="Edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        @endcan
 
-                                    <form action="{{ route('currencies.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this currency?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::currency')
+                                            <form action="{{ route('currencies.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this currency?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

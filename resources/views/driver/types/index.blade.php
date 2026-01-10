@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
-@push('action-buttons')
-    <div class="col-auto align-self-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createDriverTypeModal">
-            <i class="mdi mdi-plus mr-1 icon-xl"></i>
-            Add Driver Type
-        </button>
-    </div>
-@endpush
+@can('create::driver')
+    @push('action-buttons')
+        <div class="col-auto align-self-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createDriverTypeModal">
+                <i class="mdi mdi-plus mr-1 icon-xl"></i>
+                Add Driver Type
+            </button>
+        </div>
+    @endpush
+@endcan
 
 @section('content')
     <div class="row">
@@ -37,27 +39,32 @@
                                     @endif
                                 </td>
                                 <td>
+                                    @canany(['edit::driver', 'delete::driver'])
+                                        @can('edit::driver')
+                                            <button type="button"
+                                                    class="btn btn-primary btn-icon-square-sm edit-driver-type-btn"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->name }}"
+                                                    data-status="{{ $item->status }}"
+                                                    title="Edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        @endcan
 
-                                    <button type="button"
-                                            class="btn btn-primary btn-icon-square-sm edit-driver-type-btn"
-                                            data-id="{{ $item->id }}"
-                                            data-name="{{ $item->name }}"
-                                            data-status="{{ $item->status }}"
-                                            title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-
-                                    <form action="{{ route('drivertypes.destroy', $item->id) }}" method="POST"
-                                          style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-danger btn-icon-square-sm"
-                                                onclick="return confirm('Are you sure you want to delete this driver type?')"
-                                                title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                        @can('delete::driver')
+                                            <form action="{{ route('drivertypes.destroy', $item->id) }}" method="POST"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-icon-square-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this driver type?')"
+                                                        title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endcanany
                                 </td>
                             </tr>
                         @endforeach

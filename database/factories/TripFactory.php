@@ -20,7 +20,7 @@ class TripFactory extends Factory
     public function definition(): array
     {
         $startDate = fake()->dateTimeBetween('now', '+30 days');
-        $endDate = fake()->dateTimeBetween($startDate, '+7 days');
+        $endDate = (clone $startDate)->modify('+'.fake()->numberBetween(1, 7).' days');
 
         return [
             'trip_type_id' => TripType::factory(),

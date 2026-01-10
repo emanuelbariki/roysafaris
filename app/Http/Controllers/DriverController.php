@@ -14,8 +14,13 @@ use Throwable;
 
 class DriverController extends Controller
 {
+    /**
+     * Display a listing of drivers.
+     */
     public function drivers(): View
     {
+        $this->authorize('view::driver');
+
         return $this->index();
     }
 
@@ -57,8 +62,13 @@ class DriverController extends Controller
             ->with('flash_success', 'Driver created successfully.');
     }
 
+    /**
+     * Store a newly created driver in storage.
+     */
     public function driverStore(StoreDriverRequest $request): RedirectResponse
     {
+        $this->authorize('create::driver');
+
         return $this->store($request);
     }
 
@@ -89,8 +99,13 @@ class DriverController extends Controller
             ->with('flash_success', 'Driver updated successfully.');
     }
 
+    /**
+     * Update the specified driver in storage.
+     */
     public function driverUpdate(StoreDriverRequest $request, $driver): RedirectResponse
     {
+        $this->authorize('edit::driver');
+
         return $this->update($request, $driver);
     }
 
@@ -104,8 +119,13 @@ class DriverController extends Controller
             ->with('flash_success', 'Driver deleted successfully.');
     }
 
+    /**
+     * Remove the specified driver from storage.
+     */
     public function driverDestroy($driver): RedirectResponse
     {
+        $this->authorize('delete::driver');
+
         return $this->destroy($driver);
     }
 
@@ -117,8 +137,13 @@ class DriverController extends Controller
         return response()->json($fleets);
     }
 
+    /**
+     * Display a listing of driver types.
+     */
     public function driverTypes(): View
     {
+        $this->authorize('view::driver');
+
         try {
             $data['driverTypes'] = DriverType::query()
                 ->select('id', 'name', 'status')
@@ -135,8 +160,13 @@ class DriverController extends Controller
         }
     }
 
+    /**
+     * Store a newly created driver type in storage.
+     */
     public function driverTypesStore(StoreDriverTypeRequest $request): RedirectResponse
     {
+        $this->authorize('create::driver');
+
         $validated = $request->validated();
 
         DriverType::create($validated);
@@ -146,8 +176,13 @@ class DriverController extends Controller
             ->with('flash_success', 'Driver type created successfully.');
     }
 
+    /**
+     * Update the specified driver type in storage.
+     */
     public function driverTypesUpdate(StoreDriverTypeRequest $request, $type): RedirectResponse
     {
+        $this->authorize('edit::driver');
+
         $validated = $request->validated();
         $driverType = DriverType::findOrFail($type);
 

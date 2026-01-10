@@ -7,20 +7,30 @@ use App\Models\Channel;
 use App\Models\Country;
 use App\Models\Enquiry;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class EnquiryController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of enquiries.
+     */
+    public function index(): View
     {
+        $this->authorize('view::enquiry');
         $data['enquiries'] = Enquiry::all();
 
         return $this->extendedView('enquiry.index', $data, 'enquiries');
     }
 
-    public function edit(Enquiry $enquiry)
+    /**
+     * Show the form for editing the specified enquiry.
+     */
+    public function edit(Enquiry $enquiry): View
     {
+        $this->authorize('edit::enquiry');
         $data['countries'] = Country::all();
         $data['users'] = User::all();
         $data['enquiry'] = $enquiry;
@@ -29,15 +39,23 @@ class EnquiryController extends Controller
         return $this->extendedView('enquiry.edit', $data, 'Edit enquiry');
     }
 
-    public function destroy(Enquiry $enquiry)
+    /**
+     * Remove the specified enquiry from storage.
+     */
+    public function destroy(Enquiry $enquiry): RedirectResponse
     {
+        $this->authorize('delete::enquiry');
         $enquiry->delete();
 
         return back()->with('flash_success', 'Enquiry deleted successfully.');
     }
 
-    public function store(EnquiryRequest $request)
+    /**
+     * Store a newly created enquiry in storage.
+     */
+    public function store(EnquiryRequest $request): RedirectResponse
     {
+        $this->authorize('create::enquiry');
         $data = $request->all();
         $data['draft'] = $request->has('save_draft');
         $data['user_id'] = Auth::user()->id;
@@ -55,8 +73,12 @@ class EnquiryController extends Controller
         return $this->extendedView('enquiry.create', $data, 'Create Enquiry');
     }
 
-    public function update(Request $request, Enquiry $enquiry)
+    /**
+     * Update the specified enquiry in storage.
+     */
+    public function update(Request $request, Enquiry $enquiry): RedirectResponse
     {
+        $this->authorize('edit::enquiry');
         logger($request->all());
         $data = $request->all();
 
