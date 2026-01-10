@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\AccessController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CarrierController;
 use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\CurrencyController;
@@ -23,7 +23,7 @@ use App\Http\Controllers\TripTypeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('auth.login'))->name('login');
+Route::get('/', fn() => view('auth.login'))->name('login');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
@@ -110,6 +110,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('agents', AgentController::class);
     Route::resource('users', UserController::class);
+    Route::resource('bookings', BookingController::class);
 
     // Permission and Role Management
     Route::resource('permissions', PermissionController::class);
@@ -123,4 +124,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

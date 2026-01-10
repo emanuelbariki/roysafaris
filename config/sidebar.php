@@ -154,10 +154,10 @@ return [
     ],
     [
         'name' => 'Bookings',
-        'route' => 'agents.index',
+        'route' => 'bookings.index',
         'icon' => 'download',
         'permission' => null,
-        'active_routes' => ['agents.index'],
+        'active_routes' => ['bookings.*'],
     ],
     [
         'name' => 'Reservations',

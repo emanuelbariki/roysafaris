@@ -33,4 +33,14 @@ class ServiceProviderFactory extends Factory
             'status' => fake()->randomElement(['active', 'inactive']),
         ];
     }
+
+    /**
+     * Indicate that the service provider is an agent.
+     */
+    public function agent(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'type' => 'agent',
+        ]);
+    }
 }
