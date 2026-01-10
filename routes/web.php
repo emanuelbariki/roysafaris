@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccommodationController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\BookingController;
@@ -11,7 +12,10 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\DriverTypeController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\FleetController;
+use App\Http\Controllers\HotelChainController;
 use App\Http\Controllers\LodgeController;
+use App\Http\Controllers\MountainController;
+use App\Http\Controllers\MountainRouteController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -35,6 +39,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('enquiries', EnquiryController::class);
     Route::resource('lodges', LodgeController::class);
 
+    Route::get('hotel-chains', [HotelChainController::class, 'index'])->name('hotelchains.index');
+    Route::get('hotel-chains/create', [HotelChainController::class, 'create'])->name('hotelchains.create');
+    Route::post('hotel-chains', [HotelChainController::class, 'store'])->name('hotelchains.store');
+    Route::get('hotel-chains/{hotelchain}', [HotelChainController::class, 'show'])->name('hotelchains.show');
+    Route::get('hotel-chains/{hotelchain}/edit', [HotelChainController::class, 'edit'])->name('hotelchains.edit');
+    Route::put('hotel-chains/{hotelchain}', [HotelChainController::class, 'update'])->name('hotelchains.update');
+    Route::delete('hotel-chains/{hotelchain}', [HotelChainController::class, 'destroy'])->name('hotelchains.destroy');
+
     Route::get('service-items', [ServiceItemController::class, 'index'])->name('serviceitems.index');
     Route::post('service-items', [ServiceItemController::class, 'store'])->name('serviceitems.store');
     Route::put('service-items/{id}', [ServiceItemController::class, 'update'])->name('serviceitems.update');
@@ -57,6 +69,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('channels/{channel}', 'destroy')->name('channels.destroy');
     });
 
+    Route::resource('accommodations', AccommodationController::class);
+
+
     Route::get('trip-types', [TripTypeController::class, 'index'])->name('triptypes.index');
     Route::post('trip-types', [TripTypeController::class, 'store'])->name('triptypes.store');
     Route::put('trip-types/{id}', [TripTypeController::class, 'update'])->name('triptypes.update');
@@ -66,6 +81,22 @@ Route::middleware('auth')->group(function () {
     Route::get('trips/create', [TripController::class, 'create'])->name('trips.create');
     Route::post('trips', [TripController::class, 'store'])->name('trips.store');
     Route::put('trips/{id}', [TripController::class, 'update'])->name('trips.update');
+
+    Route::get('mountains', [MountainController::class, 'index'])->name('mountains.index');
+    Route::get('mountains/create', [MountainController::class, 'create'])->name('mountains.create');
+    Route::post('mountains', [MountainController::class, 'store'])->name('mountains.store');
+    Route::get('mountains/{mountain}', [MountainController::class, 'show'])->name('mountains.show');
+    Route::get('mountains/{mountain}/edit', [MountainController::class, 'edit'])->name('mountains.edit');
+    Route::put('mountains/{mountain}', [MountainController::class, 'update'])->name('mountains.update');
+    Route::delete('mountains/{mountain}', [MountainController::class, 'destroy'])->name('mountains.destroy');
+
+    Route::get('mountain-routes', [MountainRouteController::class, 'index'])->name('mountainroutes.index');
+    Route::get('mountain-routes/create', [MountainRouteController::class, 'create'])->name('mountainroutes.create');
+    Route::post('mountain-routes', [MountainRouteController::class, 'store'])->name('mountainroutes.store');
+    Route::get('mountain-routes/{mountainroute}', [MountainRouteController::class, 'show'])->name('mountainroutes.show');
+    Route::get('mountain-routes/{mountainroute}/edit', [MountainRouteController::class, 'edit'])->name('mountainroutes.edit');
+    Route::put('mountain-routes/{mountainroute}', [MountainRouteController::class, 'update'])->name('mountainroutes.update');
+    Route::delete('mountain-routes/{mountainroute}', [MountainRouteController::class, 'destroy'])->name('mountainroutes.destroy');
 
     Route::get('drivers/types', [DriverTypeController::class, 'index'])->name('drivertypes.index');
     Route::post('drivers/types', [DriverTypeController::class, 'store'])->name('drivertypes.store');

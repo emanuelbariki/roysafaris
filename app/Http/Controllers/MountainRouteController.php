@@ -2,107 +2,129 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MountainRouteRequest;
 use App\Models\Mountain;
 use App\Models\MountainRoute;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class MountainRouteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of mountain routes.
      */
-    public function index(Request $request)
+    public function index(): View
     {
-        //
-        
-        $tData['mountainroute'] = null;
-        if ($request->has('edit')) {
-            $tData['mountainroute'] = MountainRoute::find($request->edit);
-        }
-        $tData['mountainroutes'] = MountainRoute::all();
-        $tData['mountains'] = Mountain::all();
-        $tData['title'] = "Mountain Routes";
-        return view('masters.mountain_routes', $tData);
+        $this->authorize('view::mountainroute');
+
+        $data['mountainroutes'] = MountainRoute::query()
+            ->with('mountain')
+            ->latest()
+            ->get();
+        $data['mountains'] = Mountain::all();
+        return $this->extendedView('mountainroutes.index', $data, 'mountain routes');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new mountain route.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        $this->authorize('create::mountainroute');
+
+        $data['mountains'] = Mountain::all();
+        $data['title'] = 'Create Mountain Route';
+        return $this->extendedView('mountainroutes.create', $data, 'create mountain route');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created mountain route in storage.
      */
-    public function store(Request $request)
+    public function store(MountainRouteRequest $request): RedirectResponse
     {
-        //
-        // Check if the brand already in db
-        $exists = exists(MountainRoute::class, $request->mountainroute);
-        if (!$exists) {
-            try {
-                $mountainroute = $request->mountainroute;
-                $MountainRoute = MountainRoute::create($mountainroute);
+        $this->authorize('create::mountainroute');
 
-                $MountainRoute->update([
-                    'code' => str_pad($MountainRoute->id, 4, "0", STR_PAD_LEFT)
-                ]);
+        try {
+            $data = $request->validated();
 
-                return redirect()->route('mountainroutes.index')->with('success', 'Record added successfully!');
-            } catch (\Throwable $th) {
-                Log::error(message: $th->getMessage());
-                return redirect()->route('mountainroutes.index')->with('error', 'An error occurred while adding the car brand.');
+            // Auto-generate code if not provided
+            if (empty($data['code'])) {
+                $lastRoute = MountainRoute::query()->latest('id')->first();
+                $nextId = $lastRoute ? $lastRoute->id + 1 : 1;
+                $data['code'] = str_pad($nextId, 4, '0', STR_PAD_LEFT);
             }
+
+            MountainRoute::query()->create($data);
+
+            return redirect()->route('mountainroutes.index')
+                ->with('success', 'Mountain route created successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('flash_error', 'Failed to create mountain route. Please try again.');
         }
-
-        return redirect()->route('mountainroutes.index')->with('error', 'Record already exists!');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified mountain route.
      */
-    public function show(MountainRoute $driverType)
+    public function show(MountainRoute $mountainroute): View
     {
-        //
+        $this->authorize('view::mountainroute');
+
+        $data['mountainroute'] = $mountainroute->load('mountain');
+        $data['title'] = 'Mountain Route Details';
+        return $this->extendedView('mountainroutes.show', $data, 'view mountain route');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified mountain route.
      */
-    public function edit(MountainRoute $driverType)
+    public function edit(MountainRoute $mountainroute): View
     {
-        //
+        $this->authorize('edit::mountainroute');
+
+        $data['mountainroute'] = $mountainroute;
+        $data['mountains'] = Mountain::all();
+        $data['title'] = 'Edit Mountain Route';
+        return $this->extendedView('mountainroutes.edit', $data, 'edit mountain route');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified mountain route in storage.
      */
-    public function update(Request $request, $id)
+    public function update(MountainRouteRequest $request, MountainRoute $mountainroute): RedirectResponse
     {
-        //
-        //
-        $MountainRoutes = MountainRoute::findOrFail($id);
-        
-        $validatedData = $request->validate([
-            'mountainroute.name' => 'required|string|max:255',
-        ]);
+        $this->authorize('edit::mountainroute');
 
-        $mountainroute = $validatedData['mountainroute'];
-        // $mountainroute['modified_by'] = Auth::id();
+        try {
+            $mountainroute->update($request->validated());
 
-        $MountainRoutes->update($mountainroute);
-
-        return redirect()->route('mountainroutes.index')->with('success', 'Record updated successfully!');
+            return redirect()->route('mountainroutes.index')
+                ->with('success', 'Mountain route updated successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('flash_error', 'Failed to update mountain route. Please try again.');
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified mountain route from storage.
      */
-    public function destroy(MountainRoute $driverType)
+    public function destroy(MountainRoute $mountainroute): RedirectResponse
     {
-        //
+        $this->authorize('delete::mountainroute');
+
+        try {
+            $mountainroute->delete();
+
+            return redirect()->route('mountainroutes.index')
+                ->with('success', 'Mountain route deleted successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->with('flash_error', 'Failed to delete mountain route. Please try again.');
+        }
     }
 }

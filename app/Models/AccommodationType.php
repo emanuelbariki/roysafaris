@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class AccommodationType extends Model
 {
-    //
+    use HasFactory;
+
     protected $guarded = [];
-    // use HasFactory;
 
     /**
      * Relationship with Accommodation

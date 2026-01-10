@@ -2,100 +2,122 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Country;
+use App\Http\Requests\MountainRequest;
 use App\Models\Mountain;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class MountainController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of mountains.
      */
-    public function index(Request $request)
-    {        
-        $tData['mountain'] = null;
-        if ($request->has('edit')) {
-            $tData['mountain']     = Mountain::find($request->edit);
-        }
+    public function index(): View
+    {
+        $this->authorize('view::mountain');
 
-        $tData['countries']     = Country::all();
-        $tData['mountains']     = Mountain::all();
-        $tData['title']         = "Mountains";
-        return view('masters.mountains', $tData);
+        $data['mountains'] = Mountain::query()->latest()->get();
+        return $this->extendedView('mountains.index', $data, 'mountains');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new mountain.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        $this->authorize('create::mountain');
+
+        $data['title'] = 'Create Mountain';
+        return $this->extendedView('mountains.create', $data, 'create mountain');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created mountain in storage.
      */
-    public function store(Request $request)
+    public function store(MountainRequest $request): RedirectResponse
     {
+        $this->authorize('create::mountain');
 
-        $mountain = $request->mountain;
-        $exists = exists(Mountain::class, $mountain);
-        if (!$exists) {
-            try {
-                $mountain = $request->mountain;
-                $Mountain = Mountain::create($mountain);
+        try {
+            $data = $request->validated();
 
-                $Mountain->update([
-                    'code' => str_pad($Mountain->id, 4, "0", STR_PAD_LEFT)
-                ]);
-
-                return redirect()->route('mountains.index')->with('success', 'Record added successfully!');
-            } catch (\Throwable $th) {
-                Log::error(message: $th->getMessage());
-                return redirect()->route('mountains.index')->with('error', 'An error occurred while adding the car brand.');
+            // Auto-generate code if not provided
+            if (empty($data['code'])) {
+                $lastMountain = Mountain::query()->latest('id')->first();
+                $nextId = $lastMountain ? $lastMountain->id + 1 : 1;
+                $data['code'] = str_pad($nextId, 4, '0', STR_PAD_LEFT);
             }
+
+            Mountain::query()->create($data);
+
+            return redirect()->route('mountains.index')
+                ->with('success', 'Mountain created successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('flash_error', 'Failed to create mountain. Please try again.');
         }
-
-        return redirect()->route('mountains.index')->with('error', 'Record already exists!');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified mountain.
      */
-    public function show(Mountain $mountain)
+    public function show(Mountain $mountain): View
     {
-        //
+        $this->authorize('view::mountain');
+
+        $data['mountain'] = $mountain;
+        $data['title'] = 'Mountain Details';
+        return $this->extendedView('mountains.show', $data, 'view mountain');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified mountain.
      */
-    public function edit(Mountain $mountain)
+    public function edit(Mountain $mountain): View
     {
-        //
+        $this->authorize('edit::mountain');
+
+        $data['mountain'] = $mountain;
+        $data['title'] = 'Edit Mountain';
+        return $this->extendedView('mountains.edit', $data, 'edit mountain');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified mountain in storage.
      */
-    public function update(Request $request, $id)
+    public function update(MountainRequest $request, Mountain $mountain): RedirectResponse
     {
-        $Mountains = Mountain::findOrFail($id);
-        $validatedData = $request->validate([
-            'mountain.name' => 'required|string|max:255',
-        ]);
-        $mountain = $validatedData['mountain'];
-        $Mountains->update($mountain);
-        return redirect()->route('mountains.index')->with('success', 'Record updated successfully!');
+        $this->authorize('edit::mountain');
+
+        try {
+            $mountain->update($request->validated());
+
+            return redirect()->route('mountains.index')
+                ->with('success', 'Mountain updated successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('flash_error', 'Failed to update mountain. Please try again.');
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified mountain from storage.
      */
-    public function destroy(Mountain $mountain)
+    public function destroy(Mountain $mountain): RedirectResponse
     {
-        //
-    }
+        $this->authorize('delete::mountain');
 
+        try {
+            $mountain->delete();
+
+            return redirect()->route('mountains.index')
+                ->with('success', 'Mountain deleted successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->with('flash_error', 'Failed to delete mountain. Please try again.');
+        }
+    }
 }

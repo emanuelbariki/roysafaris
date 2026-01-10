@@ -16,8 +16,21 @@ class ChannelFactory extends Factory
      */
     public function definition(): array
     {
+        $channels = [
+            ['name' => 'Direct Booking', 'code' => 'DIRECT'],
+            ['name' => 'Online Travel Agency', 'code' => 'OTA'],
+            ['name' => 'Travel Agent', 'code' => 'TA'],
+            ['name' => 'Tour Operator', 'code' => 'TO'],
+            ['name' => 'Corporate', 'code' => 'CORP'],
+            ['name' => 'Wholesale', 'code' => 'WHOLE'],
+            ['name' => 'Referral', 'code' => 'REF'],
+        ];
+
+        $channel = fake()->unique()->randomElement($channels);
+
         return [
-            'name' => fake()->company(),
+            'name' => $channel['name'] . ' ' . fake()->randomNumber(4),
+            'code' => $channel['code'],
             'status' => fake()->randomElement(['active', 'inactive']),
         ];
     }

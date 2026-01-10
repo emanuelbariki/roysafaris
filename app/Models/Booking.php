@@ -4,32 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Model
 {
     use HasFactory;
 
-    // protected $fillable = [
-    //     'ref',
-    //     'group_name',
-    //     'nationality',
-    //     'remarks',
-    //     'file_owner',
-    //     'agent_code',
-    //     'booking_code',
-    //     'arrival_date',
-    //     'departure_date',
-    //     'pickup_details',
-    //     'drop_details',
-    //     'adults',
-    //     'children',
-    //     'infants',
-    //     'rooms',
-    //     'services',
-    //     'notes'
-    // ];
     protected $guarded = [];
     protected $casts = [
         'services' => 'array',
     ];
+
+    /**
+     * Get the channel for the booking.
+     */
+    public function channel(): BelongsTo
+    {
+        return $this->belongsTo(Channel::class);
+    }
 }

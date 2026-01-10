@@ -128,6 +128,30 @@ class RolePermissionSeeder extends Seeder
                 ['ability' => 'edit::service_item', 'name' => 'Edit Service Item'],
                 ['ability' => 'delete::service_item', 'name' => 'Delete Service Item'],
             ],
+            'Accommodations' => [
+                ['ability' => 'view::accommodation', 'name' => 'View Accommodations'],
+                ['ability' => 'create::accommodation', 'name' => 'Create Accommodation'],
+                ['ability' => 'edit::accommodation', 'name' => 'Edit Accommodation'],
+                ['ability' => 'delete::accommodation', 'name' => 'Delete Accommodation'],
+            ],
+            'Hotel Chain' => [
+                ['ability' => 'view::hotelchain', 'name' => 'View Hotel Chain'],
+                ['ability' => 'create::hotelchain', 'name' => 'Create Hotel Chain'],
+                ['ability' => 'edit::hotelchain', 'name' => 'Edit Hotel Chain'],
+                ['ability' => 'delete::hotelchain', 'name' => 'Delete Hotel Chain'],
+            ],
+            'Mountains' => [
+                ['ability' => 'view::mountain', 'name' => 'View Mountains'],
+                ['ability' => 'create::mountain', 'name' => 'Create Mountains'],
+                ['ability' => 'edit::mountain', 'name' => 'Edit Mountains'],
+                ['ability' => 'delete::mountain', 'name' => 'Delete Mountains'],
+            ],
+            'Mountain Routes' => [
+                ['ability' => 'view::mountainroute', 'name' => 'View Mountain routes'],
+                ['ability' => 'create::mountainroute', 'name' => 'Create Mountain route'],
+                ['ability' => 'edit::mountainroute', 'name' => 'Edit Mountain route'],
+                ['ability' => 'delete::mountainroute', 'name' => 'Delete Mountain route'],
+            ],
         ];
 
         try {

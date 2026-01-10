@@ -153,6 +153,47 @@ return [
         ],
     ],
     [
+        'name' => 'Mountains',
+        'icon' => 'trending-up',
+        'permission' => null,
+        'permission_type' => null,
+        'active_routes' => ['mountains.*', 'mountainroutes.*'],
+        'is_dropdown' => true,
+        'children' => [
+            [
+                'name' => 'Mountains',
+                'route' => 'mountains.index',
+                'icon' => 'ti-control-record',
+                'permission' => null,
+                'permission_type' => 'can',
+                'active_routes' => ['mountains.*'],
+            ],
+            [
+                'name' => 'Routes',
+                'route' => 'mountainroutes.index',
+                'icon' => 'ti-control-record',
+                'permission' => null,
+                'permission_type' => 'can',
+                'active_routes' => ['mountainroutes.*'],
+            ],
+        ],
+    ],
+    [
+        'name' => 'Hotel Chains',
+        'route' => 'hotelchains.index',
+        'icon' => 'star',
+        'permission' => null,
+        'active_routes' => ['hotelchains.*'],
+    ],
+    [
+        'name' => 'Accomodations',
+        'route' => 'accommodations.index',
+        'icon' => 'sunset',
+        'permission' => null,
+        'active_routes' => ['accommodations.*'],
+    ],
+
+    [
         'name' => 'Bookings',
         'route' => 'bookings.index',
         'icon' => 'download',
@@ -161,6 +202,13 @@ return [
     ],
     [
         'name' => 'Reservations',
+        'route' => 'agents.index',
+        'icon' => 'database',
+        'permission' => null,
+        'active_routes' => ['agents.index'],
+    ],
+    [
+        'name' => 'Park Fees',
         'route' => 'agents.index',
         'icon' => 'database',
         'permission' => null,

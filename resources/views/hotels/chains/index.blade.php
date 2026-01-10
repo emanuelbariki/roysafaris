@@ -82,7 +82,7 @@
     <div class="modal fade" id="createAgentModal" data-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="createAgentModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form class="modal-content" action="{{ route('hotelchains.store') }} }}" method="POST">
+            <form class="modal-content" action="{{ route('hotelchains.store') }}" method="POST">
                 @csrf
 
                 <div class="modal-header">

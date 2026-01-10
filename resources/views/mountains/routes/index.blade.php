@@ -23,14 +23,16 @@
                         <tr>
                             <th>S/N</th>
                             <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Address</th>
+                            <th>description</th>
+                            <th>mountain</th>
+                            <th>Min days</th>
+                            <th>Max days</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($agents as $item)
+                        @foreach($mountainsRoutes as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->name }}</td>
@@ -82,7 +84,7 @@
     <div class="modal fade" id="createAgentModal" data-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="createAgentModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form class="modal-content" action="{{ route('hotelchains.store') }} }}" method="POST">
+            <form class="modal-content" action="{{ route('mountainroutes.store') }}" method="POST">
                 @csrf
 
                 <div class="modal-header">
@@ -97,40 +99,26 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" name="hotelchain[name]"
-                                       placeholder="Elewana, Marriott, etc." required=""
-                                       value="{{ isset($hotelchain) ? $hotelchain->name : old('name') }}">
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="code">Code</label>
-                                <input type="text" class="form-control" id="code" name="hotelchain[code]" placeholder="Hotel Chain Code" required="" value="{{ isset($hotelchain) ? $hotelchain->code : old('code') }}">
-                            </div>
-                        </div> --}}
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="hotelchain[email]"
-                                       placeholder="Email Addr" required=""
-                                       value="{{ isset($hotelchain) ? $hotelchain->email : old('email') }}">
+                                <input style="text-transform: uppercase;" type="text" class="form-control" id="name"
+                                       name="mountainroute[name]" placeholder="MACHAME,SHIRA,RONGAI , etc" required=""
+                                       value="{{ isset($mountainroute) ? $mountainroute->name : old('name') }}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="code">Phone</label>
-                                <input type="phone" class="form-control" id="phone" name="hotelchain[phone]"
-                                       placeholder="Phone" required=""
-                                       value="{{ isset($hotelchain) ? $hotelchain->phone : old('phone') }}">
+                                <label for="name">Description</label>
+                                <input type="text" class="form-control" id="name" name="mountainroute[description]"
+                                       placeholder="Machame Route , etc" required=""
+                                       value="{{ isset($mountainroute) ? $mountainroute->description : old('description') }}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="bank_name">Bank Details</label>
-                                <select name="hotelchain[bank_name]" id="bank_name" class="form-control">
+                                <label for="mountainroute">Moutain</label>
+                                <select class="form-control" name="mountainroute[mountain_id]" id="mountainroute">
                                     <option selected disabled>Choose</option>
-                                    @foreach ($banks as $b)
-                                        <option value="{{ $b['full_name'] }}"> {{ $b['full_name'] }}</option>
+                                    @foreach ($mountains as $m)
+                                        <option value="{{ $m->id }}">{{ $m->name }}</option>
                                     @endforeach
                                 </select>
 
@@ -138,20 +126,29 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="bank_no">Account Number</label>
-                                <input type="phone" class="form-control" id="bank_no" name="hotelchain[bank_no]"
-                                       placeholder="Account No." required=""
-                                       value="{{ isset($hotelchain) ? $hotelchain->bank_no : old('bank_no') }}">
+                                <label for="name">Min Days</label>
+                                <input type="number" class="form-control" id="mindays" name="mountainroute[min_days]"
+                                       min="1" max="100" placeholder="min days" required=""
+                                       value="{{ isset($mountainroute) ? $mountainroute->name : old('name') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="name">Max Days</label>
+                                <input type="number" class="form-control" id="maxdays" name="mountainroute[max_days]"
+                                       min="1" max="100" placeholder="max days" required=""
+                                       value="{{ isset($mountainroute) ? $mountainroute->description : old('description') }}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="useremail">Status</label>
-                                <select name="hotelchain[status]" class="form-control">
+                                <select name="mountainroute[status]" class="form-control">
                                     <option selected disabled>Choose</option>
                                     <option value="active">Active</option>
                                     <option value="inactive">In Active</option>
                                 </select>
+                                {{-- <input type="email" class="form-control" id="useremail" required=""> --}}
                             </div>
                         </div>
                     </div>
@@ -186,40 +183,26 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" name="hotelchain[name]"
-                                       placeholder="Elewana, Marriott, etc." required=""
-                                       value="{{ isset($hotelchain) ? $hotelchain->name : old('name') }}">
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="code">Code</label>
-                                <input type="text" class="form-control" id="code" name="hotelchain[code]" placeholder="Hotel Chain Code" required="" value="{{ isset($hotelchain) ? $hotelchain->code : old('code') }}">
-                            </div>
-                        </div> --}}
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="hotelchain[email]"
-                                       placeholder="Email Addr" required=""
-                                       value="{{ isset($hotelchain) ? $hotelchain->email : old('email') }}">
+                                <input style="text-transform: uppercase;" type="text" class="form-control" id="name"
+                                       name="mountainroute[name]" placeholder="MACHAME,SHIRA,RONGAI , etc" required=""
+                                       value="{{ isset($mountainroute) ? $mountainroute->name : old('name') }}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="code">Phone</label>
-                                <input type="phone" class="form-control" id="phone" name="hotelchain[phone]"
-                                       placeholder="Phone" required=""
-                                       value="{{ isset($hotelchain) ? $hotelchain->phone : old('phone') }}">
+                                <label for="name">Description</label>
+                                <input type="text" class="form-control" id="name" name="mountainroute[description]"
+                                       placeholder="Machame Route , etc" required=""
+                                       value="{{ isset($mountainroute) ? $mountainroute->description : old('description') }}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="bank_name">Bank Details</label>
-                                <select name="hotelchain[bank_name]" id="bank_name" class="form-control">
+                                <label for="mountainroute">Moutain</label>
+                                <select class="form-control" name="mountainroute[mountain_id]" id="mountainroute">
                                     <option selected disabled>Choose</option>
-                                    @foreach ($banks as $b)
-                                        <option value="{{ $b['full_name'] }}"> {{ $b['full_name'] }}</option>
+                                    @foreach ($mountains as $m)
+                                        <option value="{{ $m->id }}">{{ $m->name }}</option>
                                     @endforeach
                                 </select>
 
@@ -227,20 +210,29 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="bank_no">Account Number</label>
-                                <input type="phone" class="form-control" id="bank_no" name="hotelchain[bank_no]"
-                                       placeholder="Account No." required=""
-                                       value="{{ isset($hotelchain) ? $hotelchain->bank_no : old('bank_no') }}">
+                                <label for="name">Min Days</label>
+                                <input type="number" class="form-control" id="mindays" name="mountainroute[min_days]"
+                                       min="1" max="100" placeholder="min days" required=""
+                                       value="{{ isset($mountainroute) ? $mountainroute->name : old('name') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="name">Max Days</label>
+                                <input type="number" class="form-control" id="maxdays" name="mountainroute[max_days]"
+                                       min="1" max="100" placeholder="max days" required=""
+                                       value="{{ isset($mountainroute) ? $mountainroute->description : old('description') }}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="useremail">Status</label>
-                                <select name="hotelchain[status]" class="form-control">
+                                <select name="mountainroute[status]" class="form-control">
                                     <option selected disabled>Choose</option>
                                     <option value="active">Active</option>
                                     <option value="inactive">In Active</option>
                                 </select>
+                                {{-- <input type="email" class="form-control" id="useremail" required=""> --}}
                             </div>
                         </div>
                     </div>
@@ -307,7 +299,7 @@
                 $('#edit_address').val('{{ old('address') }}');
 
                 // Update form action
-                var updateUrl = '{{ route('hotelchains.update', ':id') }}'.replace(':id', agentId);
+                var updateUrl = '{{ route('mountainroutes.update', ':id') }}'.replace(':id', agentId);
                 $('#editAgentForm').attr('action', updateUrl);
 
                 // Show the modal

@@ -13,15 +13,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Core data
         $this->call([
             RolePermissionSeeder::class,
             AdminUserSeeder::class,
-            RoomSeeder::class,
             CountriesSeeder::class,
+
+            // Master data (no dependencies)
+            ChannelSeeder::class,
+            CurrencySeeder::class,
+
+            // Geography-dependent
             PickupDropoffPointSeeder::class,
+
+            // Mountains and routes
+            MountainSeeder::class,
+            MountainRouteSeeder::class,
+
+            // Accommodation-related
+            HotelChainSeeder::class,
+            AccommodationSeeder::class,
+
+            // Bookings (depends on channels)
+            BookingSeeder::class,
+
+            // Other seeders
+            RoomSeeder::class,
             FleetActivitySeeder::class,
+            // EnquirySeeder::class, // Commented out - requires more users
         ]);
     }
 }
